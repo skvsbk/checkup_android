@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">checkup_android</string>
+    <string name="app_name">Журнал обходов</string>
+
+    <string name="main_button_setup">Настройка</string>
+    <string name="main_button_login">Вход</string>
+    <string name="main_checkbox">Запомнить</string>
+    <string name="main_text_name">Имя</string>
+    <string name="main_text_password">Пароль</string>
+    <string name="main_text_facility">Площадка</string>
+    <string name="main_teast_role">Роль не подходит для использования мобильного приложения</string>
+
+    <string name="setup_text_server">Адрес API-сервера</string>
+    <string name="setup_text_hint">http://server:port</string>
+    <string name="setup_button">Запомнить</string>
+
 </resources>
