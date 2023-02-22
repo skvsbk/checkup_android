@@ -6,11 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".AdminActivity">
 
-    <TextView
-        android:id="@+id/textView3"
+    <Button
+        android:id="@+id/button_check_nfc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Admin"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="2dp" />
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="547dp"
+        android:layout_weight="1"
+        android:onClick="onClickCheckNFC"
+        android:text="@string/admin_button_check_nfc"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_link_nfc" />
+
+    <Button
+        android:id="@+id/button_link_nfc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="228dp"
+        android:layout_weight="1"
+        android:onClick="onClickLinkNFC"
+        android:text="@string/admin_button_link_nfc"
+        app:layout_constraintBottom_toTopOf="@+id/button_check_nfc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
