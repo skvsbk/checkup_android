@@ -2,16 +2,13 @@ package com.example.checkup_android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class AdminActivity extends AppCompatActivity {
 
-    Button button_check_nfc, button_link_nfc;
-
-
+    Button button_check_nfc, button_link_nfc, button_add_place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,33 +17,22 @@ public class AdminActivity extends AppCompatActivity {
 
         button_check_nfc = findViewById(R.id.button_check_nfc);
         button_link_nfc = findViewById(R.id.button_link_nfc);
+        button_add_place = findViewById(R.id.button_add_place);
 
-//        Intent intent = new Intent(this, LinkNFCTagActivity.class);
-//        button_check_nfc.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                startActivity(intent);
-//
-//            }
-//        });
+        button_check_nfc.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CheckNFCTagActivity.class);
+            startActivity(intent);
+        });
 
-//        public void onClickCheckNFC(View v) {
-//            Intent intent = new Intent(this, CheckNFCTagActivity.class);
-//            startActivity(intent);
-//        }
+        button_link_nfc.setOnClickListener(view -> {
+            Intent intent = new Intent(this, LinkNFCTagActivity.class);
+            startActivity(intent);
+        });
 
-
-
-    }
-    public void onClickLinkNFC (View v){
-        Intent intent = new Intent(this, LinkNFCTagActivity.class);
-        startActivity(intent);
-    }
-
-    public void onClickCheckNFC (View v){
-        Intent intent = new Intent(this, CheckNFCTagActivity.class);
-        startActivity(intent);
+        button_add_place.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdmAddPlaceActivity.class);
+            startActivity(intent);
+        });
     }
 }
 

@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREF_URLAPI = "UrlAPI";
     private static final String PREF_LOGIN = "Login";
     private static final String PREF_FACILITY = "Facility";
+
     SharedPreferences settings;
     SharedPreferences.Editor prefEditor;
 
@@ -118,8 +119,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
     @Override
@@ -134,9 +133,7 @@ public class MainActivity extends AppCompatActivity {
 //            spinner_adapter.clear();
 //            spinner_adapter.addAll(this.facilities);
             spinner_adapter.notifyDataSetChanged();
-
         }
-
     }
 
     public void onClickSetup(View v) {
@@ -250,6 +247,11 @@ public class MainActivity extends AppCompatActivity {
                 String receivedPass;
                 try {
                     JSONObject response = new JSONObject(result);
+//                 /////   Анализ "detail": "User not found" - прервать с ошибкой
+//                  if (response.getString("detail").equals("User not found")) {
+//                      Toast.makeText(getApplicationContext(), "Пользователь не найден", Toast.LENGTH_SHORT).show();
+//                  }
+//                  /////
                     receivedPass = response.getString("password");
                     if (response.getString("role_name").equals("user_webapp")) {
                         Toast.makeText(getApplicationContext(), "Неподходящая роль", Toast.LENGTH_SHORT).show();
