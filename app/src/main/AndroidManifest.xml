@@ -29,7 +29,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".CheckNFCTagActivity"
+            android:name=".AdmCheckNFCTagActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -47,7 +47,7 @@
 
         </activity>
         <activity
-            android:name=".LinkNFCTagActivity"
+            android:name=".AdmLinkNFCTagActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

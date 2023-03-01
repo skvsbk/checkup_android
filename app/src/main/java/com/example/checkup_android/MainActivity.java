@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickEnter(View v) throws InterruptedException {
+    public void onClickEnter(View v) {
         if (editTextPersonName.length() == 0) {
             String toastText = "Введите имя пользователя";
             Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
@@ -202,7 +202,8 @@ public class MainActivity extends AppCompatActivity {
                 String result = new String (responseBody);
                 try {
                     JSONObject response = new JSONObject(result);
-                    vars.setVars("facility_id", Integer.parseInt(response.getString("id")));
+                    vars.setIntVars("facility_id", Integer.parseInt(response.getString("id")));
+                    vars.setStrVars("facility_name", facility_name);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 String result = new String (responseBody);
                 try {
                     JSONObject response = new JSONObject(result);
-                    vars.setVars("role_id", Integer.parseInt(response.getString("id")));
+                    vars.setIntVars("role_id", Integer.parseInt(response.getString("id")));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -258,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if (response.getString("role_name").equals("admin")) {
                         if (comparePasswords(receivedPass, editTextPassword.getText().toString())) {
                             //?? still a question
-                            vars.setVars("user_id", Integer.parseInt(response.getString("id")));
+                            vars.setIntVars("user_id", Integer.parseInt(response.getString("id")));
                             getRoleId(response.getString("role_name"));
                             //
                             startAdminActivity();
@@ -267,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else if (response.getString("role_name").equals("user_mobapp")) {
                         if (comparePasswords(receivedPass, editTextPassword.getText().toString())) {
-                            vars.setVars("user_id", Integer.parseInt(response.getString("id")));
+                            vars.setIntVars("user_id", Integer.parseInt(response.getString("id")));
                             getRoleId(response.getString("role_name"));
                             startRouteActivity();
                         } else {

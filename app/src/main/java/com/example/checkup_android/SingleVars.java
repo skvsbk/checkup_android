@@ -6,20 +6,36 @@ import java.util.Map;
 public class SingleVars {
 
     private static SingleVars INSTANCE;
-    Map<String, Integer> vars;
+    Map<String, Integer> intVars;
+    Map<String, String> strVars;
 
     public SingleVars() {
-        vars = new HashMap<String, Integer>();
+
+        intVars = new HashMap<String, Integer>();
+        strVars = new HashMap<String, String>();
     };
 
-    public void setVars(String var_key, Integer var_value) {
-        this.vars.put(var_key, var_value);
+    public void setStrVars(String var_key, String var_value) {
+        this.strVars.put(var_key, var_value);
     }
 
-    public Integer getVars(String var_key){
-        Integer a = 0;
+    public String getStrVars(String var_key){
+//        Integer a = 0;
         try {
-            return this.vars.get(var_key);    
+            return this.strVars.get(var_key);
+        } catch (Exception e){
+            return "";
+        }
+    }
+
+    public void setIntVars(String var_key, Integer var_value) {
+        this.intVars.put(var_key, var_value);
+    }
+
+    public Integer getIntvars(String var_key){
+//        Integer a = 0;
+        try {
+            return this.intVars.get(var_key);
         } catch (Exception e){
             return 0;
         }

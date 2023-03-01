@@ -2,6 +2,7 @@ package com.example.checkup_android;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +21,12 @@ public class AdminActivity extends AppCompatActivity {
         button_add_place = findViewById(R.id.button_add_place);
 
         button_check_nfc.setOnClickListener(view -> {
-            Intent intent = new Intent(this, CheckNFCTagActivity.class);
+            Intent intent = new Intent(this, AdmCheckNFCTagActivity.class);
             startActivity(intent);
         });
 
-        button_link_nfc.setOnClickListener(view -> {
-            Intent intent = new Intent(this, LinkNFCTagActivity.class);
+        button_link_nfc.setOnClickListener((View view) -> {
+            Intent intent = new Intent(this, AdmLinkNFCTagActivity.class);
             startActivity(intent);
         });
 

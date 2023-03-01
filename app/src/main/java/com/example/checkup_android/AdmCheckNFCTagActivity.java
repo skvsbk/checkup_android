@@ -22,9 +22,12 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class CheckNFCTagActivity extends AppCompatActivity {
+public class AdmCheckNFCTagActivity extends AppCompatActivity {
     private static final String PREFS_FILE = "Settings";
     private static final String PREF_URLAPI = "UrlAPI";
+    SharedPreferences settings;
+    String urlAPIServer;
+    AsyncHttpClient httpClient = new AsyncHttpClient();
 
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
@@ -38,17 +41,15 @@ public class CheckNFCTagActivity extends AppCompatActivity {
     TextView nfc_facility;
     Button nfc_button;
 
-    SharedPreferences settings;
-    String urlAPIServer;
-    AsyncHttpClient httpClient = new AsyncHttpClient();
 
-    SingleVars singleVars = SingleVars.getInstance();
+
+//    SingleVars singleVars = SingleVars.getInstance();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_check_nfctag);
+        setContentView(R.layout.activity_adm_check_nfctag);
 
         settings = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
         urlAPIServer = settings.getString(PREF_URLAPI, "");
@@ -85,7 +86,6 @@ public class CheckNFCTagActivity extends AppCompatActivity {
             nfc_contents.setText(nfc_serial);
 
 //            Get Plant By Nfc Serial
-//            String facility_id = String.valueOf(singleVars.getVars("facility_id"));
             String queryAPIplants = urlAPIServer + "/plants/nfc_serial/" + nfc_serial;
             httpClient.get(queryAPIplants, new AsyncHttpResponseHandler() {
                 @Override
