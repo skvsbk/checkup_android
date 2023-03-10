@@ -22,7 +22,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".AdmAddPlaceActivity"
+            android:name=".AdmAddPlantActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -37,14 +37,14 @@
 
             <intent-filter>
                 <action android:name="com.example.checkup_android.intent.action.nfc" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".AdmLinkNFCTagActivity"
@@ -52,6 +52,17 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
+            <intent-filter>
+                <action android:name="com.example.checkup_android.intent.action.nfc" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".CheckupActivity"

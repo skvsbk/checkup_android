@@ -1,10 +1,10 @@
 package com.example.checkup_android;
+// for RecyclerView
 
 public class Plants {
     private String plant_name;
     private String nfc_serial;
     private int icon;
-
 
     public Plants(String plant_name, String nfc_serial, int icon) { //, int flag){
 

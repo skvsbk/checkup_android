@@ -31,7 +31,7 @@ public class AdminActivity extends AppCompatActivity {
         });
 
         button_add_place.setOnClickListener(view -> {
-            Intent intent = new Intent(this, AdmAddPlaceActivity.class);
+            Intent intent = new Intent(this, AdmAddPlantActivity.class);
             startActivity(intent);
         });
     }

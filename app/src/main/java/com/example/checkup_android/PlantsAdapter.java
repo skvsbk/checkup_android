@@ -1,5 +1,5 @@
 package com.example.checkup_android;
-
+// for RecyclerView
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -47,7 +47,6 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
         final TextView plantView, nfcserialView;
         ViewHolder(View view){
             super(view);
-//            activeView = view.findViewById(R.id.imageViewIcon);
             iconView = view.findViewById(R.id.imageViewIcon);
             plantView = view.findViewById(R.id.plant_name);
             nfcserialView = view.findViewById(R.id.nfc_serial);

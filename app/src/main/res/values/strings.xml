@@ -1,9 +1,24 @@
 <resources>
     <string name="app_name">Журнал обходов</string>
 
+    <string name="alert_fail">Нет соединения с сервером</string>
+    <string name="alert_enter_login">Введите имя пользователя</string>
+    <string name="alert_wrong_role">Неподходящая роль</string>
+    <string name="alert_bad_passwd">Неверный пароль</string>
+    <string name="alert_error_getting_data">\"Ошибка получения данных: \"</string>
+    <string name="alert_ndc_added">NFC добавлена</string>
+    <string name="alert_plant_not_found">Помещение/оборудование не найдено</string>
+    <string name="alert_unique_name">Наименование должно быть уникальным</string>
+    <string name="alert_item_sucсess_added">Запись успешно добавлена</string>
+
+    <string name="dialog_title">Внимание!</string>
+    <string name="dialog_nfc_for">NFC метка назначена для </string>
+    <string name="dialog_route_select">Начать обход по маршруту: </string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Отмена</string>
+
     <string name="main_button_setup">Настройка</string>
     <string name="main_button_login">Вход</string>
-    <string name="main_checkbox">Запомнить</string>
     <string name="main_text_name">Имя</string>
     <string name="main_text_password">Пароль</string>
     <string name="main_text_facility">Площадка</string>
@@ -16,7 +31,6 @@
     <string name="admin_button_check_nfc">Проверить NFC</string>
     <string name="admin_button_link_nfc">Добавить NFC</string>
     <string name="admin_button_add_place">Добавить помещение/оборудование</string>
-
 
     <string name="check_nfc_tag_serial">NFC serial:</string>
     <string name="check_nfc_tag_facility">Площадка:</string>
@@ -31,20 +45,20 @@
     <string name="add_plant_list_title_active">Актив.</string>
     <string name="add_plant_facility">Площадка:</string>
 
-    <string name="link_nfc">Link NFC</string>
+    <string name="link_nfc_title">Коснитесь метки и выберите помещение/оборудование</string>
+    <string name="link_nfc_text_nfc_serial">NFC serial:</string>
+    <string name="link_nfc_plant">Помещение/оборудование</string>
+    <string name="link_nfc_button">Добавить</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-<!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
-<!--    <string name="title_activity_check_nfctag">CheckNFCTagActivity</string>-->
-    <!-- Strings used for fragments for navigation -->
-<!--    <string name="first_fragment_label">First Fragment</string>-->
-<!--    <string name="second_fragment_label">Second Fragment</string>-->
-<!--    <string name="next">Next</string>-->
-<!--    <string name="previous">Previous</string>-->
-<!--    <string name="hello_first_fragment">Hello first fragment</string>-->
-<!--    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>-->
+    <string name="route_checkup_total">Всего обходов:</string>
+    <string name="route_checkup_finished">Завершенных обходов:</string>
+    <string name="route_checkup_cancelled">Незавершенных обходов:</string>
+    <string name="route_checkups_last">Последние 10 обходов:</string>
+    <string name="route_choose_route">Выбор маршрута:</string>
+    <string name="route_button_start">Начать обход</string>
 
-
-
+    <string name="checkup_date">Дата обхода:</string>
+    <string name="checkup_facility">Площадка:</string>
+    <string name="checkup_route_name">Маршрут:</string>
 
 </resources>

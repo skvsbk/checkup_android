@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     TextView editTextPersonName, editTextPassword;
 
     Spinner spinner_facitities;
-    ArrayList<String> facilities = new ArrayList<String>();
+    ArrayList<String> facilitiesArray = new ArrayList<String>();
     ArrayAdapter<String> spinner_adapter;
 
     String urlAPIServer;
@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         urlAPIServer = settings.getString(PREF_URLAPI, "");
 
         //Get facilities from db and send it to spinner
-        if (facilities.size() == 0) {
-            facilities.add("None");
+        if (facilitiesArray.size() == 0) {
+            facilitiesArray.add("None");
         }
 
         String queryAPI = urlAPIServer + "/facilities/";
@@ -95,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
                 String result = new String (responseBody);
                 try {
                     JSONArray array = new JSONArray(result);
-                    facilities.clear();
+                    facilitiesArray.clear();
                     spinner_adapter.clear();
                     for (int i=0; i<array.length(); i++) {
                         JSONObject o = (JSONObject) array.get(i);
-                        facilities.add(o.getString("name"));
+                        facilitiesArray.add(o.getString("name"));
                     }
                     //Обновление выпадающего списка
                     spinner_adapter.notifyDataSetChanged();
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         if (spinner_adapter == null) {
-            spinner_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, this.facilities);
+            spinner_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, this.facilitiesArray);
             spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_facitities.setAdapter(spinner_adapter);
         } else {
@@ -143,8 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickEnter(View v) {
         if (editTextPersonName.length() == 0) {
-            String toastText = "Введите имя пользователя";
-            Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.alert_enter_login, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -210,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -230,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -239,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
     private void getUser(String login_name) {
         // Authentication: get from db by username, compare password hash, return json dict {name, role}
         // token?
-
+//      http://127.0.0.1:8000/users/user_m
         String queryAPI = urlAPIServer + "/users/" + login_name;
         httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
             @Override
@@ -255,16 +254,17 @@ public class MainActivity extends AppCompatActivity {
 //                  /////
                     receivedPass = response.getString("password");
                     if (response.getString("role_name").equals("user_webapp")) {
-                        Toast.makeText(getApplicationContext(), "Неподходящая роль", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.alert_wrong_role, Toast.LENGTH_SHORT).show();
                     } else if (response.getString("role_name").equals("admin")) {
                         if (comparePasswords(receivedPass, editTextPassword.getText().toString())) {
                             //?? still a question
                             vars.setIntVars("user_id", Integer.parseInt(response.getString("id")));
+                            vars.setStrVars("user_name", response.getString("name"));
                             getRoleId(response.getString("role_name"));
-                            //
+                            // Open admin activity
                             startAdminActivity();
                         } else {
-                            Toast.makeText(getApplicationContext(), "Неверный пароль", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.alert_bad_passwd, Toast.LENGTH_SHORT).show();
                         }
                     } else if (response.getString("role_name").equals("user_mobapp")) {
                         if (comparePasswords(receivedPass, editTextPassword.getText().toString())) {
@@ -272,17 +272,17 @@ public class MainActivity extends AppCompatActivity {
                             getRoleId(response.getString("role_name"));
                             startRouteActivity();
                         } else {
-                            Toast.makeText(getApplicationContext(), "Неверный пароль", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.alert_bad_passwd, Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "Ошибка получения данных: " + e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.alert_error_getting_data) + e.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -81,7 +81,7 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
 //        Read NFC and get plant from DB
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             byte[] tagId = getIntent().getByteArrayExtra(NfcAdapter.EXTRA_ID);
-            String nfc_serial = byteArrayToHex(tagId);
+            String nfc_serial = Utils.byteArrayToHex(tagId);
 //            String nfc_serial = "53E9DC63200001";
             nfc_contents.setText(nfc_serial);
 
@@ -106,7 +106,7 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                    Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
                 }
             });
 //            Attempt to get val_params (if exists)
@@ -134,19 +134,10 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
                     }
                 });
         }
-    }
-
-    private String byteArrayToHex(byte[] a) {
-//    public static String byteArrayToHex(byte[] a) {
-        StringBuilder sb = new StringBuilder(a.length * 2);
-        for(byte b: a) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
     }
 
     private void clearTextView() {

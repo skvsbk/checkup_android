@@ -20,14 +20,14 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class AdmAddPlaceActivity extends AppCompatActivity {
+public class AdmAddPlantActivity extends AppCompatActivity {
     private static final String PREFS_FILE = "Settings";
     private static final String PREF_URLAPI = "UrlAPI";
     SharedPreferences settings;
     String urlAPIServer;
     AsyncHttpClient httpClient = new AsyncHttpClient();
 
-    ArrayList<Plants> plants = new ArrayList<Plants>();
+    ArrayList<Plants> plants = new ArrayList<>();
     TextView facility_name, editTextPlants;
     SingleVars vars = SingleVars.getInstance();
     Integer facility_id;
@@ -39,7 +39,7 @@ public class AdmAddPlaceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adm_add_place);
+        setContentView(R.layout.activity_adm_add_plant);
 
         settings = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
         urlAPIServer = settings.getString(PREF_URLAPI, "");
@@ -96,7 +96,7 @@ public class AdmAddPlaceActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -105,11 +105,11 @@ public class AdmAddPlaceActivity extends AppCompatActivity {
         if (editTextPlants.getText().toString().equals("")) {
             return;
         }
-//      'http://127.0.0.1:8000/plants/?plant_name=1.111&facility_id=1'
+//      POST 'http://127.0.0.1:8000/plants/?plant_name=1.111&facility_id=1'
         String queryAPIaddPlants = urlAPIServer + "/plants/?plant_name=" + editTextPlants.getText() + "&facility_id=" + facility_id;
 
-//      http://127.0.0.1:8000/plants/1.004?facility_id=1
-        String queruAPIgetPlantByName = urlAPIServer + "/plants/" + editTextPlants.getText() + "?facility_id=" + facility_id;
+//      GET http://127.0.0.1:8000/plants/name/1.004?facility_id=1
+        String queruAPIgetPlantByName = urlAPIServer + "/plants/name/" + editTextPlants.getText() + "?facility_id=" + facility_id;
         httpClient.get(queruAPIgetPlantByName, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -119,7 +119,7 @@ public class AdmAddPlaceActivity extends AppCompatActivity {
                     if (response.has("detail")) {
                         addPlant(queryAPIaddPlants);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Наименование должно быть уникальным", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.alert_unique_name, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -128,7 +128,7 @@ public class AdmAddPlaceActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -138,14 +138,14 @@ public class AdmAddPlaceActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 editTextPlants.setText("");
-                Toast.makeText(getApplicationContext(), "Запись успешно добавлена", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.alert_item_sucсess_added, Toast.LENGTH_SHORT).show();
                 plants.clear();
                 fillListView();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Нет соединения с сервером", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
