@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/plantTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:padding="10dp"
+            android:text="Plant"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/imageViewCheckIcon"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <ImageView
+            android:id="@+id/imageViewCheckIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <RelativeLayout
+            android:id="@+id/expandable_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/plantTitle"
+            tools:layout_editor_absoluteX="-16dp">
+
+            <TextView
+                android:id="@+id/nfcLinkedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/checks_nfc_title"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/nfcLinked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:padding="10dp"
+                android:text="NFC_tag"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/nfcReadTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nfcLinkedTitle"
+                android:padding="10dp"
+                android:text="@string/checks_nfc_title_read"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/nfcRead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nfcLinkedTitle"
+                android:layout_alignParentEnd="true"
+                android:padding="10dp"
+                android:text="NFC_tag"
+                android:textSize="18sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutParams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nfcReadTitle">
+
+                <TextView
+                    android:id="@+id/textParamName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Param name"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textParamMin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textParamName"
+                    android:padding="10dp"
+                    android:text="ParamMin"
+                    android:textSize="18sp"
+                    app:layout_constraintTop_toBottomOf="@+id/textParamName"
+                    tools:layout_editor_absoluteX="0dp" />
+
+                <EditText
+                    android:id="@+id/editTextParam"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    app:layout_constraintStart_toEndOf="@+id/textParamMin"
+                    app:layout_constraintTop_toBottomOf="@+id/textParamName" />
+
+                <TextView
+                    android:id="@+id/textParamMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textParamName"
+                    android:padding="10dp"
+                    android:text="ParamMax"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@+id/editTextParam"
+                    app:layout_constraintTop_toBottomOf="@+id/textParamName" />
+
+                <TextView
+                    android:id="@+id/textUnitName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textParamName"
+                    android:padding="10dp"
+                    android:text="UnitName"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@+id/textParamMax"
+                    app:layout_constraintTop_toBottomOf="@+id/textParamName" />
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/editTextСomment"
+                android:layout_width="269dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutParams"
+                android:layout_marginTop="0dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/checks_comnent_hint"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/buttonSendChecks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutParams"
+                android:layout_alignParentEnd="true"
+                android:text="@string/checks_button_send" />
+
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>
