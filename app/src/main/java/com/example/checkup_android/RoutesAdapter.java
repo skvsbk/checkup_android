@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,11 +17,13 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     private final LayoutInflater inflater;
     private final List<Routes> routes;
     TextView choiceView = null;
-    SingleVars vars = SingleVars.getInstance();
+    VarsSingleton vars = VarsSingleton.getInstance();
+    Button button_start_check;
 
-    RoutesAdapter(Context context, List<Routes> routes) {
+    RoutesAdapter(Context context, List<Routes> routes, Button btn) {
         this.routes = routes;
         this.inflater = LayoutInflater.from(context);
+        this.button_start_check = btn;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,6 +36,21 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         Routes routes = this.routes.get(position);
         holder.routeView.setText(routes.getRoute_name());
+
+        holder.routeView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                button_start_check.setEnabled(true);
+                if (choiceView == null){
+                    choiceView = holder.routeView;
+                }
+;                choiceView.setBackgroundColor(0);
+                holder.routeView.setBackgroundResource(R.color.choice);
+                choiceView = holder.routeView;
+                vars.setStrVars("route_name", (String) choiceView.getText());
+            }
+        });
     }
 
     @Override
@@ -47,19 +65,19 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             super(itemView);
             routeView = itemView.findViewById(R.id.route_name);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int posItem = getAdapterPosition();
-                    if (choiceView == null){
-                        choiceView = routeView;
-                    }
-                    choiceView.setBackgroundColor(0);
-                    routeView.setBackgroundResource(R.color.choice);
-                    choiceView = routeView;
-                    vars.setStrVars("route_name", (String) choiceView.getText());
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int posItem = getAdapterPosition();
+//                    if (choiceView == null){
+//                        choiceView = routeView;
+//                    }
+//                    choiceView.setBackgroundColor(0);
+//                    routeView.setBackgroundResource(R.color.choice);
+//                    choiceView = routeView;
+//                    vars.setStrVars("route_name", (String) choiceView.getText());
+//                }
+//            });
         }
     }
 }

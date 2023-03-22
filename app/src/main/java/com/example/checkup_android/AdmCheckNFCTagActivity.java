@@ -34,6 +34,7 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
     IntentFilter[] writingTagFilters;
     boolean writeMode;
     Tag myTag;
+
     TextView nfc_contents;
     TextView nfc_plant;
     TextView nfc_params;
@@ -60,10 +61,10 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
         nfc_params =  (TextView) findViewById(R.id.nfc_params);
         nfc_params_name =  (TextView) findViewById(R.id.nfc_params_name);
         nfc_button = (Button) findViewById(R.id.nfc_button);
+
+        // NFC
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-
         readFromIntent(getIntent());
-
         pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);

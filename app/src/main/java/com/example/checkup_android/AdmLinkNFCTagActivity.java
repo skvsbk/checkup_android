@@ -34,7 +34,7 @@ public class AdmLinkNFCTagActivity extends AppCompatActivity {
     private static final String PREF_URLAPI = "UrlAPI";
     SharedPreferences settings;
     String urlAPIServer;
-    SingleVars vars = SingleVars.getInstance();
+    VarsSingleton vars = VarsSingleton.getInstance();
     Integer facility_id;
     AsyncHttpClient httpClient = new AsyncHttpClient();
     ArrayList<String> plantsArrayForSpinner = new ArrayList<>();
@@ -80,9 +80,7 @@ public class AdmLinkNFCTagActivity extends AppCompatActivity {
         if (plantsArrayForSpinner.size() == 0) {
             plantsArrayForSpinner.add("");
         }
-//        if (paramsArrayForSpinner.size() == 0) {
-//            paramsArrayForSpinner.add("");
-//        }
+
         //Get free plants http://127.0.0.1:8000/plants/free?facility_id=1
         String queryAPI = urlAPIServer + "/plants/free?facility_id=" + facility_id;
         httpClient.get(queryAPI, new AsyncHttpResponseHandler() {

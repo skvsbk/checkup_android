@@ -36,6 +36,12 @@ public class CheckupsAdapter extends RecyclerView.Adapter<CheckupsAdapter.ViewHo
         holder.dateView.setText(checkups.getDate());
         holder.facilityView.setText(checkups.getFacilityName());
         holder.routeView.setText(checkups.getRouteName());
+        if (checkups.getComplete()) {
+            holder.layoutCheckup.setBackgroundResource(R.color.green_lihgt);
+        } else {
+            holder.layoutCheckup.setBackgroundResource(R.color.red_light);
+        }
+
     }
 
     @Override
@@ -45,11 +51,15 @@ public class CheckupsAdapter extends RecyclerView.Adapter<CheckupsAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView dateView, facilityView, routeView;
+        final View layoutCheckup;
+
         ViewHolder(View view){
             super(view);
             dateView = view.findViewById(R.id.textView_date);
             facilityView = view.findViewById(R.id.textView_facility);
             routeView = view.findViewById(R.id.textView_route);
+            layoutCheckup = view.findViewById(R.id.layoutChechup);
+
         }
     }
 }

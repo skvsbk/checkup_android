@@ -3,27 +3,28 @@ package com.example.checkup_android;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SingleVars {
+public class VarsSingleton {
 
-    private static SingleVars INSTANCE;
+    private static VarsSingleton INSTANCE;
     Map<String, Integer> intVars;
     Map<String, String> strVars;
 
-    public SingleVars() {
+    public VarsSingleton() {
 
         intVars = new HashMap<String, Integer>();
         strVars = new HashMap<String, String>();
-    };
+    }
+
+    ;
 
     public void setStrVars(String var_key, String var_value) {
         this.strVars.put(var_key, var_value);
     }
 
-    public String getStrVars(String var_key){
-//        Integer a = 0;
+    public String getStrVars(String var_key) {
         try {
             return this.strVars.get(var_key);
-        } catch (Exception e){
+        } catch (Exception e) {
             return "";
         }
     }
@@ -32,19 +33,18 @@ public class SingleVars {
         this.intVars.put(var_key, var_value);
     }
 
-    public Integer getIntvars(String var_key){
-//        Integer a = 0;
+    public Integer getIntvars(String var_key) {
         try {
             return this.intVars.get(var_key);
-        } catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
 
-    public static SingleVars getInstance(){
+    public static VarsSingleton getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new SingleVars();
+            INSTANCE = new VarsSingleton();
         }
-            return INSTANCE;
+        return INSTANCE;
     }
 }

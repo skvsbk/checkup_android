@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     AsyncHttpClient httpClient = new AsyncHttpClient();
 
     //For transfer user_id, role_id, facility_id to another activities
-    SingleVars vars = SingleVars.getInstance();
+    VarsSingleton vars = VarsSingleton.getInstance();
 
     NfcAdapter nfcAdapter;
 
@@ -269,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if (response.getString("role_name").equals("user_mobapp")) {
                         if (comparePasswords(receivedPass, editTextPassword.getText().toString())) {
                             vars.setIntVars("user_id", Integer.parseInt(response.getString("id")));
+                            vars.setStrVars("user_name", response.getString("name"));
                             getRoleId(response.getString("role_name"));
                             startRouteActivity();
                         } else {

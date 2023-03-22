@@ -29,7 +29,7 @@ public class AdmAddPlantActivity extends AppCompatActivity {
 
     ArrayList<Plants> plants = new ArrayList<>();
     TextView facility_name, editTextPlants;
-    SingleVars vars = SingleVars.getInstance();
+    VarsSingleton vars = VarsSingleton.getInstance();
     Integer facility_id;
 
     RecyclerView recyclerView;
@@ -116,6 +116,7 @@ public class AdmAddPlantActivity extends AppCompatActivity {
                 String result = new String(responseBody);
                 try {
                     JSONObject response = new JSONObject(result);
+                    // if plant_name is free - create new plant
                     if (response.has("detail")) {
                         addPlant(queryAPIaddPlants);
                     } else {

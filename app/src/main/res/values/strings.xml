@@ -5,7 +5,8 @@
     <string name="alert_enter_login">Введите имя пользователя</string>
     <string name="alert_wrong_role">Неподходящая роль</string>
     <string name="alert_bad_passwd">Неверный пароль</string>
-    <string name="alert_error_getting_data">\"Ошибка получения данных: \"</string>
+    <string name="alert_error_getting_data">Ошибка получения данных: </string>
+    <string name="alert_error_saving_data">Ошибка сохранения данных: </string>
     <string name="alert_ndc_added">NFC добавлена</string>
     <string name="alert_plant_not_found">Помещение/оборудование не найдено</string>
     <string name="alert_unique_name">Наименование должно быть уникальным</string>
@@ -16,6 +17,8 @@
     <string name="dialog_route_select">Начать обход по маршруту: </string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Отмена</string>
+    <string name="dialog_checkup_text">Обход не завершен. Уйти и оставить незавершенным?</string>
+    <string name="dialog_checkup_continue">Продолжаем обход</string>
 
     <string name="main_button_setup">Настройка</string>
     <string name="main_button_login">Вход</string>
@@ -60,5 +63,12 @@
     <string name="checkup_date">Дата обхода:</string>
     <string name="checkup_facility">Площадка:</string>
     <string name="checkup_route_name">Маршрут:</string>
+
+    <string name="checks_route_name">Маршрут:</string>
+    <string name="checks_nfc_title">NFC serial:</string>
+    <string name="checks_nfc_title_read">NFC serial (факт):</string>
+    <string name="checks_comnent_hint">Коментарий:</string>
+    <string name="checks_button_send">OK</string>
+
 
 </resources>
