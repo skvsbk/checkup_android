@@ -6,36 +6,77 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class CheckupDataService {
 
-//    JSONArray routeLinksArray;
     Context context;
 
     public CheckupDataService(Context context) {
         this.context = context;
     }
 
-    public interface GetRouteLinksListener {
-        void onResponse(JSONArray routeLinksArray);
+    public interface GetJSONArrayListener {
+        void onResponse(JSONArray responseJSONArray);
         void onErrorResponse(String message);
     }
 
-    public void getRouteLinks(String urlAPIServer, String roite_id, GetRouteLinksListener getRouteLinksListener){
+    public void getJSONArray(String urlAPI, GetJSONArrayListener getJSONArrayListener){
 
-//        http://0.0.0.0:8000/rolutelinks/2
-        String queryAPIroutes = urlAPIServer + "/rolutelinks/" + roite_id;
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, queryAPIroutes, null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlAPI, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                getRouteLinksListener.onResponse(response);
+                getJSONArrayListener.onResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                getRouteLinksListener.onErrorResponse(String.valueOf(R.string.alert_fail));
+                getJSONArrayListener.onErrorResponse(String.valueOf(R.string.alert_fail));
+            }
+        });
+        RequestSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public interface GetJSONObjectListener {
+        void onResponse(JSONObject responseJSONObject);
+        void onErrorResponse(String message);
+}
+    public void getJSONObject(String urlAPI, CheckupDataService.GetJSONObjectListener getJSONObjectListener){
+
+        JsonObjectRequest request = new JsonObjectRequest(urlAPI, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                getJSONObjectListener.onResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                getJSONObjectListener.onErrorResponse(String.valueOf(R.string.alert_fail));
+            }
+        });
+        RequestSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public interface PostJSONObjectListener {
+        void onResponse(JSONObject responseJSONObject);
+        void onErrorResponse(String message);
+    }
+    public void postJSONObject(String urlAPI, JSONObject params, CheckupDataService.PostJSONObjectListener postJSONObjectListener){
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlAPI, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                postJSONObjectListener.onResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                postJSONObjectListener.onErrorResponse(String.valueOf(R.string.alert_fail));
             }
         });
         RequestSingleton.getInstance(context).addToRequestQueue(request);

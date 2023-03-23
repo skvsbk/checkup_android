@@ -13,9 +13,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,17 +21,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.entity.ContentType;
-import cz.msebera.android.httpclient.entity.StringEntity;
-
 public class RouteActivity extends AppCompatActivity {
     private static final String PREFS_FILE = "Settings";
     private static final String PREF_URLAPI = "UrlAPI";
     SharedPreferences settings;
     String urlAPIServer;
     VarsSingleton vars = VarsSingleton.getInstance();
-    AsyncHttpClient httpClient = new AsyncHttpClient();
 
     ArrayList<Routes> routes = new ArrayList<>();
     ArrayList<Checkups> checkups = new ArrayList<>();
@@ -47,6 +39,7 @@ public class RouteActivity extends AppCompatActivity {
     CheckupsAdapter adapter_checkups;
 
     JSONArray routeArrayForDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,16 +75,16 @@ public class RouteActivity extends AppCompatActivity {
 
     private void fillRoutesListView() {
 //        http://127.0.0.1:8000/routes/?facility_id=1
-        String queryAPIroutes = urlAPIServer + "/routes/?facility_id=" + facility_id;
-        httpClient.get(queryAPIroutes, new AsyncHttpResponseHandler() {
+        String queryAPI = urlAPIServer + "/routes/?facility_id=" + facility_id;
+        CheckupDataService checkupDataService = new CheckupDataService(RouteActivity.this);
+        checkupDataService.getJSONArray(queryAPI, new CheckupDataService.GetJSONArrayListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String(responseBody);
+            public void onResponse(JSONArray responseJSONArray) {
                 try {
-                    routeArrayForDB = new JSONArray(result);
+                    routeArrayForDB = responseJSONArray; //new JSONArray(responseJSONArray);
                     String route_name = "";
-                    for (int i = 0; i < routeArrayForDB.length(); i++){
-                        JSONObject o = routeArrayForDB.getJSONObject(i);
+                    for (int i = 0; i < responseJSONArray.length(); i++){
+                        JSONObject o = responseJSONArray.getJSONObject(i);
                         route_name = o.getString("name");
                         routes.add(new Routes(route_name));
                     }
@@ -100,10 +93,9 @@ public class RouteActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            public void onErrorResponse(String message) {
+                Toast.makeText(RouteActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -113,15 +105,13 @@ public class RouteActivity extends AppCompatActivity {
         String user_id = vars.getIntvars("user_id").toString();
         String limit = "10";
         String queryAPI = urlAPIServer + "/checkup_headers/last?user_id=" + user_id + "&limit=" + limit;
-        httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+        CheckupDataService checkupDataService = new CheckupDataService(RouteActivity.this);
+        checkupDataService.getJSONArray(queryAPI, new CheckupDataService.GetJSONArrayListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String(responseBody);
+            public void onResponse(JSONArray responseJSONArray) {
                 try {
-                    JSONArray responseArray = new JSONArray(result);
-
-                    for (int i = 0; i < responseArray.length(); i++){
-                        JSONObject o = responseArray.getJSONObject(i);
+                    for (int i = 0; i < responseJSONArray.length(); i++){
+                        JSONObject o = responseJSONArray.getJSONObject(i);
                         checkups.add(new Checkups(o.getString("time_start"),
                                 o.getString("facility_name"),
                                 o.getString("route_name"),
@@ -132,10 +122,9 @@ public class RouteActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+            public void onErrorResponse(String message) {
+                Toast.makeText(RouteActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -157,7 +146,7 @@ public class RouteActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        startCheckupActivity();
+                        startChecksActivity();
                     }
                 })
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -180,28 +169,29 @@ public class RouteActivity extends AppCompatActivity {
 //        http://0.0.0.0:8000/checkup_headers/count/user_id/18
         String user_id = vars.getIntvars("user_id").toString();
         String queryAPI = urlAPIServer + "/checkup_headers/count/user_id/" + user_id;
-        httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+        CheckupDataService checkupDataService = new CheckupDataService( RouteActivity.this);
+        checkupDataService.getJSONObject(queryAPI, new CheckupDataService.GetJSONObjectListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String(responseBody);
+            public void onResponse(JSONObject responseJSONObject) {
                 try {
-                    JSONObject response = new JSONObject(result);
-                    textView_total.setText(response.getString("total"));
-                    textView_success.setText(response.getString("finished"));
-                    textView_canceled.setText(response.getString("not_finished"));
+                    textView_total.setText(responseJSONObject.getString("total"));
+                    textView_success.setText(responseJSONObject.getString("finished"));
+                    textView_canceled.setText(responseJSONObject.getString("not_finished"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+            public void onErrorResponse(String message) {
+                Toast.makeText(RouteActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
+
+
+
     }
 
-    public void startCheckupActivity() {
+    public void startChecksActivity() {
         Intent intent = new Intent(this, ChecksActivity.class);
         startActivity(intent);
     }
@@ -230,17 +220,15 @@ public class RouteActivity extends AppCompatActivity {
         Date dateNow = new Date();
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         jsonParams.put("time_start", formatForDateNow.format(dateNow));
-        StringEntity paramsBody = null;
-        paramsBody = new StringEntity(jsonParams.toString(), ContentType.APPLICATION_JSON.withCharset("UTF-8"));
 
-        httpClient.post(this, queryAPI, paramsBody, "application/json", new AsyncHttpResponseHandler(){
+        CheckupDataService checkupDataService = new CheckupDataService(RouteActivity.this);
+        checkupDataService.postJSONObject(queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String(responseBody);
+            public void onResponse(JSONObject responseJSONObject) {
                 try {
-                    JSONObject response = new JSONObject(result);
-                    if (response.has("id")){
-                        vars.setIntVars("header_id", Integer.valueOf(response.getString("id")));
+//                    JSONObject response = new JSONObject(result);
+                    if (responseJSONObject.has("id")){
+                        vars.setIntVars("header_id", Integer.valueOf(responseJSONObject.getString("id")));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -248,10 +236,11 @@ public class RouteActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), R.string.alert_error_saving_data + error.toString() , Toast.LENGTH_LONG).show();
+            public void onErrorResponse(String message) {
+                Toast.makeText(RouteActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 }

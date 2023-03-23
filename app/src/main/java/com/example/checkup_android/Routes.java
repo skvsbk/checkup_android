@@ -12,9 +12,9 @@ public class Routes {
         return this.route_name;
     }
 
-//    public void setRoute_name(String plant_name) {
-//        this.route_name = route_name;
-//    }
+    public void setRoute_name(String plant_name) {
+        this.route_name = route_name;
+    }
 
 
 }

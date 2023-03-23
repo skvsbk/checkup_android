@@ -18,16 +18,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.Header;
 
 public class AdmLinkNFCTagActivity extends AppCompatActivity {
     private static final String PREFS_FILE = "Settings";
@@ -36,7 +31,6 @@ public class AdmLinkNFCTagActivity extends AppCompatActivity {
     String urlAPIServer;
     VarsSingleton vars = VarsSingleton.getInstance();
     Integer facility_id;
-    AsyncHttpClient httpClient = new AsyncHttpClient();
     ArrayList<String> plantsArrayForSpinner = new ArrayList<>();
 //    ArrayList<String> paramsArrayForSpinner = new ArrayList<>();
     ArrayAdapter<String> spinner_adapter_plants;
@@ -81,14 +75,20 @@ public class AdmLinkNFCTagActivity extends AppCompatActivity {
             plantsArrayForSpinner.add("");
         }
 
+        feelSpinnerAdapter();
+
+    }
+
+    private void feelSpinnerAdapter(){
         //Get free plants http://127.0.0.1:8000/plants/free?facility_id=1
         String queryAPI = urlAPIServer + "/plants/free?facility_id=" + facility_id;
-        httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+
+        CheckupDataService checkupDataService = new CheckupDataService(AdmLinkNFCTagActivity.this);
+        checkupDataService.getJSONArray(queryAPI, new CheckupDataService.GetJSONArrayListener(){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String (responseBody);
+            public void onResponse(JSONArray responseJSONArray) {
                 try {
-                    plantsArrayForDB = new JSONArray(result);
+                    plantsArrayForDB = responseJSONArray;
                     plantsArrayForSpinner.clear();
                     spinner_adapter_plants.clear();
                     for (int i=0; i<plantsArrayForDB.length(); i++) {
@@ -102,11 +102,10 @@ public class AdmLinkNFCTagActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            public void onErrorResponse(String message) {
+                Toast.makeText(AdmLinkNFCTagActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private void readFromIntent(Intent intent) {
@@ -123,19 +122,53 @@ public class AdmLinkNFCTagActivity extends AppCompatActivity {
 //            Get Plant By Nfc Serial
 //            http://127.0.0.1:8000/nfc/get_plant?nfc_serial=53C5D463200001&facility_id=1
             String queryAPI = urlAPIServer + "/nfc/get_plant?nfc_serial=" + nfc_serial + "&facility_id=" + facility_id;
-            httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+//            httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+//                @Override
+//                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                    String result = new String(responseBody);
+//                    try {
+//                        JSONObject response = new JSONObject(result);
+//                        if (response.has("detail")) {
+//                            allowToAdd = true;
+//                        } else {
+//                            // alert message with plant_name
+//                            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AdmLinkNFCTagActivity.this);
+//                            alertBuilder.setTitle(R.string.dialog_title)
+//                                    .setMessage(getString(R.string.dialog_nfc_for) + response.getString("plant_name"))
+//                                    .setCancelable(false)
+//                                    .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            allowToAdd = false;
+//                                            nfc_contents.setText("");
+//                                        }
+//                                    });
+//                            AlertDialog dialog = alertBuilder.create();
+//                            dialog.show();
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                @Override
+//                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                    Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+//                }
+//            });
+
+            CheckupDataService checkupDataService = new CheckupDataService( AdmLinkNFCTagActivity.this);
+            checkupDataService.getJSONObject(queryAPI, new CheckupDataService.GetJSONObjectListener() {
                 @Override
-                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    String result = new String(responseBody);
+                public void onResponse(JSONObject responseJSONObject) {
                     try {
-                        JSONObject response = new JSONObject(result);
-                        if (response.has("detail")) {
+//                        JSONObject response = new JSONObject(result);
+                        if (responseJSONObject.has("detail")) {
                             allowToAdd = true;
                         } else {
                             // alert message with plant_name
                             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AdmLinkNFCTagActivity.this);
                             alertBuilder.setTitle(R.string.dialog_title)
-                                    .setMessage(getString(R.string.dialog_nfc_for) + response.getString("plant_name"))
+                                    .setMessage(getString(R.string.dialog_nfc_for) + responseJSONObject.getString("plant_name"))
                                     .setCancelable(false)
                                     .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                                         @Override
@@ -152,10 +185,11 @@ public class AdmLinkNFCTagActivity extends AppCompatActivity {
                     }
                 }
                 @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                    Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+                public void onErrorResponse(String message) {
+                    Toast.makeText(AdmLinkNFCTagActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
                 }
             });
+
 //            Attempt to get val_params (if exists)
 //            String queryAPIparams = urlAPIServer + "/valparams/nfc_serial/" + nfc_serial;
 //            httpClient.get(queryAPIparams, new AsyncHttpResponseHandler() {
@@ -188,28 +222,51 @@ public class AdmLinkNFCTagActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickAdd(View v) {
+    public void onClickAdd(View v) throws JSONException {
         if (allowToAdd && !nfc_contents.equals("")) {
 
             String plant_id = Utils.getIdFromArray(plantsArrayForDB, spinner_plants.getSelectedItem().toString());
 
             if (plant_id != null) {
                 // CREATE nfc_tag with plant
-                // POST http://127.0.0.1:8000/nfc/?nfc_serial=1234567890&plant_id=23
-                String queryAPI = urlAPIServer + "/nfc/?nfc_serial=" + nfc_contents.getText().toString() + "&plant_id=" + plant_id;
-                httpClient.post(queryAPI, new AsyncHttpResponseHandler() {
+                // POST http://0.0.0.0:8000/nfc/
+                String queryAPI = urlAPIServer + "/nfc/";
+//                httpClient.post(queryAPI, new AsyncHttpResponseHandler() {
+//
+//                    @Override
+//                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                        Toast.makeText(getApplicationContext(), R.string.alert_ndc_added, Toast.LENGTH_SHORT).show();
+//                        nfc_contents.setText("");
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                        Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
+
+                JSONObject jsonParams = new JSONObject();
+                jsonParams.put("nfc_serial", nfc_contents.getText().toString());
+                jsonParams.put("plant_id", plant_id);
+                jsonParams.put("active", true);
+
+                CheckupDataService checkupDataService = new CheckupDataService(AdmLinkNFCTagActivity.this);
+                checkupDataService.postJSONObject(queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        Toast.makeText(getApplicationContext(), R.string.alert_ndc_added, Toast.LENGTH_SHORT).show();
-                        nfc_contents.setText("");
+                    public void onResponse(JSONObject responseJSONObject) {
+                        if (responseJSONObject.has("id")){
+                            nfc_contents.setText("");
+                            Toast.makeText(getApplicationContext(), R.string.alert_ndc_added, Toast.LENGTH_SHORT).show();
+                        }
                     }
-
                     @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+                    public void onErrorResponse(String message) {
+                        Toast.makeText(AdmLinkNFCTagActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
             } else {
                 Toast.makeText(getApplicationContext(), R.string.alert_plant_not_found, Toast.LENGTH_SHORT).show();
             }

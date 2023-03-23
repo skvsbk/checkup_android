@@ -1,7 +1,6 @@
 package com.example.checkup_android;
 
 import android.app.PendingIntent;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -65,17 +64,6 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writingTagFilters = new IntentFilter[] { tagDetected };
-
-//        textView19.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int pos = vars.getIntvars("current_position");
-//                Checks check = checksList.get(pos);
-//                String ser = check.getNfc_serial();
-//
-//                textView21.setText("pos=" + String.valueOf(pos) + " serial=" + ser);
-//            }
-//        });
     }
 
     private void setRecyclerView() {
@@ -85,14 +73,16 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
 
     private void fillRecyclerView() {
         checksList = new ArrayList<>();
-        CheckupDataService checkupDataService = new CheckupDataService(ChecksActivity.this);
+        // http://0.0.0.0:8000/rolutelinks/2
         String route_id = vars.getIntvars("route_id").toString();
-        checkupDataService.getRouteLinks(urlAPIServer,route_id, new CheckupDataService.GetRouteLinksListener() {
+        String queryAPI = urlAPIServer + "/rolutelinks/" + route_id;
+        CheckupDataService checkupDataService = new CheckupDataService(ChecksActivity.this);
+        checkupDataService.getJSONArray(queryAPI, new CheckupDataService.GetJSONArrayListener() {
             @Override
-            public void onResponse(JSONArray routeLinksArray) {
+            public void onResponse(JSONArray responseJSONArray) {
                 try {
-                    for (int i = 0; i < routeLinksArray.length(); i++) {
-                        JSONObject o = routeLinksArray.getJSONObject(i);
+                    for (int i = 0; i < responseJSONArray.length(); i++) {
+                        JSONObject o = responseJSONArray.getJSONObject(i);
                         String plant_name = o.getString("plant_name");
                         Integer plant_id = o.getInt("plant_id");
                         String nfc_serial = o.getString("nfc_serial");
@@ -129,18 +119,8 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
         alertBuilder.setTitle(R.string.dialog_title)
                 .setMessage(getString(R.string.dialog_checkup_text))
                 .setCancelable(false)
-                .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        starRouteActivity();
-                    }
-                })
-                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), R.string.dialog_checkup_continue, Toast.LENGTH_LONG).show();
-                    }
-                });
+                .setPositiveButton(R.string.dialog_ok, (dialog, which) -> starRouteActivity())
+                .setNegativeButton(R.string.dialog_cancel, (dialog, which) -> Toast.makeText(getApplicationContext(), R.string.dialog_checkup_continue, Toast.LENGTH_LONG).show());
         AlertDialog dialog = alertBuilder.create();
         dialog.show();
     }
@@ -174,7 +154,7 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
             int currentPosition = vars.getIntvars("current_position");
             Checks currentCheck = checksList.get(currentPosition);
             currentCheck.setNfc_read(nfc_serial);
-            checksAdapter.notifyDataSetChanged();
+            checksAdapter.notifyItemChanged(currentPosition);
          }
     }
 
@@ -214,6 +194,7 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
         Checks checkCurrent = checksList.get(position);
         checkCurrent.setExpandable(false);
         checkCurrent.setSend(true);
+        checksAdapter.notifyItemChanged(position);
 
         int nextPos = position+1;
         // Expand next
@@ -221,11 +202,10 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
             checksList.get(nextPos).setExpandable(true);
             vars.setIntVars("current_position", nextPos);
 //                        vars.setStrVars("current_nfc", nfcLinkedTxt.getText().toString());
-            checksAdapter.notifyDataSetChanged();
+            checksAdapter.notifyItemChanged(nextPos);
 
         } else {
         // put time_finish to checkup_headers table and open RoutersAvtivity
-            checksAdapter.notifyDataSetChanged();
             Toast.makeText(getApplicationContext(), "Обход завершен", Toast.LENGTH_SHORT).show();
         }
 

@@ -15,12 +15,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import cz.msebera.android.httpclient.Header;
 
 public class AdmCheckNFCTagActivity extends AppCompatActivity {
     private static final String PREFS_FILE = "Settings";
@@ -41,11 +38,6 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
     TextView nfc_params_name;
     TextView nfc_facility;
     Button nfc_button;
-
-
-
-//    SingleVars singleVars = SingleVars.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,57 +79,57 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
             nfc_contents.setText(nfc_serial);
 
 //            Get Plant By Nfc Serial
-            String queryAPIplants = urlAPIServer + "/plants/nfc_serial/" + nfc_serial;
-            httpClient.get(queryAPIplants, new AsyncHttpResponseHandler() {
+            String queryAPI = urlAPIServer + "/plants/nfc_serial/" + nfc_serial;
+
+            CheckupDataService checkupDataService = new CheckupDataService(AdmCheckNFCTagActivity.this);
+            checkupDataService.getJSONObject(queryAPI, new CheckupDataService.GetJSONObjectListener(){
                 @Override
-                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    String result = new String(responseBody);
+                public void onResponse(JSONObject responseJSONObject) {
                     try {
-                        JSONObject response = new JSONObject(result);
-                        if (response.has("detail")) {
+                        if (responseJSONObject.has("detail")) {
                             nfc_plant.setText("");
                             nfc_facility.setText("");
                         } else {
-                            nfc_plant.setText(response.getString("name"));
-                            nfc_facility.setText(response.getString("facility"));
+                            nfc_plant.setText(responseJSONObject.getString("name"));
+                            nfc_facility.setText(responseJSONObject.getString("facility"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                    Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+                public void onErrorResponse(String message) {
+                    Toast.makeText(AdmCheckNFCTagActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
                 }
             });
-//            Attempt to get val_params (if exists)
-                String queryAPIparams = urlAPIServer + "/valparams/nfc_serial/" + nfc_serial;
-                httpClient.get(queryAPIparams, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        String result = new String(responseBody);
-                        try {
-                            JSONObject response = new JSONObject(result);
-                            if (response.has("detail")) {
-                                nfc_params_name.setText("");
-                                nfc_params.setText("");
-                            } else {
-                                nfc_params_name.setText("Наим:\nMin:\nMax:\nЕд.:");
-                                String textParams = response.getString("name") + "\n" +
-                                        response.getString("min_value") + "\n" +
-                                        response.getString("max_value") + "\n" +
-                                        response.getString("unit");
-                                nfc_params.setText(textParams);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
+//          Attempt to get val_params (if exists)
+            String queryAPIparams = urlAPIServer + "/valparams/nfc_serial/" + nfc_serial;
+            checkupDataService.getJSONObject(queryAPIparams, new CheckupDataService.GetJSONObjectListener(){
+                @Override
+                public void onResponse(JSONObject responseJSONObject) {
+                    try {
+                        if (responseJSONObject.has("detail")) {
+                            nfc_params_name.setText("");
+                            nfc_params.setText("");
+                        } else {
+                            nfc_params_name.setText("Наим:\nMin:\nMax:\nЕд.:");
+                            String textParams = responseJSONObject.getString("name") + "\n" +
+                                    responseJSONObject.getString("min_value") + "\n" +
+                                    responseJSONObject.getString("max_value") + "\n" +
+                                    responseJSONObject.getString("unit_name");
+                            nfc_params.setText(textParams);
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }
+                @Override
+                public void onErrorResponse(String message) {
+                    Toast.makeText(AdmCheckNFCTagActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
     }
 

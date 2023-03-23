@@ -9,23 +9,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
-
 public class AdmAddPlantActivity extends AppCompatActivity {
     private static final String PREFS_FILE = "Settings";
     private static final String PREF_URLAPI = "UrlAPI";
     SharedPreferences settings;
     String urlAPIServer;
-    AsyncHttpClient httpClient = new AsyncHttpClient();
 
     ArrayList<Plants> plants = new ArrayList<>();
     TextView facility_name, editTextPlants;
@@ -61,19 +55,17 @@ public class AdmAddPlantActivity extends AppCompatActivity {
 
     private void fillListView() {
 //      'http://127.0.0.1:8000/plants/?facility_id=1'
-        String queryAPIplants = urlAPIServer + "/plants/?facility_id=" + facility_id;
+        String queryAPI = urlAPIServer + "/plants/?facility_id=" + facility_id;
 
-        httpClient.get(queryAPIplants, new AsyncHttpResponseHandler() {
+        CheckupDataService checkupDataService = new CheckupDataService(AdmAddPlantActivity.this);
+        checkupDataService.getJSONArray(queryAPI, new CheckupDataService.GetJSONArrayListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String(responseBody);
-                
+            public void onResponse(JSONArray responseJSONArray) {
                 try {
-                    JSONArray response = new JSONArray(result);
                     String nfc_serial = null;
                     Integer setIcon = null;
-                    for (int i = 0; i<response.length(); i++){
-                        JSONObject o = response.getJSONObject(i);
+                    for (int i = 0; i<responseJSONArray.length(); i++){
+                        JSONObject o = responseJSONArray.getJSONObject(i);
                         if (o.getString("nfc_serial").equals("null")) {
                             nfc_serial = "";
                         } else {
@@ -93,10 +85,9 @@ public class AdmAddPlantActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            public void onErrorResponse(String message) {
+                Toast.makeText(AdmAddPlantActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -105,47 +96,51 @@ public class AdmAddPlantActivity extends AppCompatActivity {
         if (editTextPlants.getText().toString().equals("")) {
             return;
         }
-//      POST 'http://127.0.0.1:8000/plants/?plant_name=1.111&facility_id=1'
-        String queryAPIaddPlants = urlAPIServer + "/plants/?plant_name=" + editTextPlants.getText() + "&facility_id=" + facility_id;
 
 //      GET http://127.0.0.1:8000/plants/name/1.004?facility_id=1
-        String queruAPIgetPlantByName = urlAPIServer + "/plants/name/" + editTextPlants.getText() + "?facility_id=" + facility_id;
-        httpClient.get(queruAPIgetPlantByName, new AsyncHttpResponseHandler() {
+        String queryAPI = urlAPIServer + "/plants/name/" + editTextPlants.getText() + "?facility_id=" + facility_id;
+
+        CheckupDataService checkupDataService = new CheckupDataService(AdmAddPlantActivity.this);
+        checkupDataService.getJSONObject(queryAPI, new CheckupDataService.GetJSONObjectListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String(responseBody);
-                try {
-                    JSONObject response = new JSONObject(result);
-                    // if plant_name is free - create new plant
-                    if (response.has("detail")) {
-                        addPlant(queryAPIaddPlants);
-                    } else {
-                        Toast.makeText(getApplicationContext(), R.string.alert_unique_name, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            public void onResponse(JSONObject responseJSONObject) {
+                // if plant_name is free - create new plant
+                if (responseJSONObject.has("detail")) {
+                    addPlant();
+                } else {
+                    Toast.makeText(AdmAddPlantActivity.this, R.string.alert_unique_name, Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            public void onErrorResponse(String message) {
                 Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void addPlant(String queryAPI) {
-        httpClient.post(queryAPI, new AsyncHttpResponseHandler() {
+    private void addPlant() {
+//      POST 'http://127.0.0.1:8000/plants/'
+        String queryAPI = urlAPIServer + "/plants/";
+
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("name", editTextPlants.getText());
+            jsonParams.put("facility_id", facility_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        CheckupDataService checkupDataService = new CheckupDataService(AdmAddPlantActivity.this);
+        checkupDataService.postJSONObject(queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onResponse(JSONObject responseJSONObject) {
                 editTextPlants.setText("");
                 Toast.makeText(getApplicationContext(), R.string.alert_item_sucсess_added, Toast.LENGTH_SHORT).show();
                 plants.clear();
                 fillListView();
             }
-
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            public void onErrorResponse(String message) {
                 Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });

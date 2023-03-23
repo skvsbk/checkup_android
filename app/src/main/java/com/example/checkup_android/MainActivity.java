@@ -12,9 +12,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +20,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.Header;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> spinner_adapter;
 
     String urlAPIServer;
-    AsyncHttpClient httpClient = new AsyncHttpClient();
 
     //For transfer user_id, role_id, facility_id to another activities
     VarsSingleton vars = VarsSingleton.getInstance();
@@ -89,16 +83,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String queryAPI = urlAPIServer + "/facilities/";
-        httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+        CheckupDataService checkupDataService = new CheckupDataService(MainActivity.this);
+        checkupDataService.getJSONArray(queryAPI, new CheckupDataService.GetJSONArrayListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String (responseBody);
+            public void onResponse(JSONArray responseJSONArray) {
                 try {
-                    JSONArray array = new JSONArray(result);
                     facilitiesArray.clear();
                     spinner_adapter.clear();
-                    for (int i=0; i<array.length(); i++) {
-                        JSONObject o = (JSONObject) array.get(i);
+                    for (int i = 0; i < responseJSONArray.length(); i++) {
+                        JSONObject o = (JSONObject) responseJSONArray.get(i);
                         facilitiesArray.add(o.getString("name"));
                     }
                     //Обновление выпадающего списка
@@ -115,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            public void onErrorResponse(String message) {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -194,42 +187,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getFacilityId(String facility_name){
+
         String queryAPI = urlAPIServer + "/facilities/" + facility_name;
-        httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+        CheckupDataService checkupDataService = new CheckupDataService( MainActivity.this);
+        checkupDataService.getJSONObject(queryAPI, new CheckupDataService.GetJSONObjectListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String (responseBody);
+            public void onResponse(JSONObject responseJSONObject) {
                 try {
-                    JSONObject response = new JSONObject(result);
-                    vars.setIntVars("facility_id", Integer.parseInt(response.getString("id")));
+                    vars.setIntVars("facility_id", Integer.parseInt(responseJSONObject.getString("id")));
                     vars.setStrVars("facility_name", facility_name);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            public void onErrorResponse(String message) {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void getRoleId(String role_name){
         String queryAPI = urlAPIServer + "/roles/" + role_name;
-        httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+        CheckupDataService checkupDataService = new CheckupDataService( MainActivity.this);
+        checkupDataService.getJSONObject(queryAPI, new CheckupDataService.GetJSONObjectListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String (responseBody);
+            public void onResponse(JSONObject responseJSONObject) {
                 try {
-                    JSONObject response = new JSONObject(result);
-                    vars.setIntVars("role_id", Integer.parseInt(response.getString("id")));
+                    vars.setIntVars("role_id", Integer.parseInt(responseJSONObject.getString("id")));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            public void onErrorResponse(String message) {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -240,53 +232,49 @@ public class MainActivity extends AppCompatActivity {
         // token?
 //      http://127.0.0.1:8000/users/user_m
         String queryAPI = urlAPIServer + "/users/" + login_name;
-        httpClient.get(queryAPI, new AsyncHttpResponseHandler() {
+        CheckupDataService checkupDataService = new CheckupDataService( MainActivity.this);
+        checkupDataService.getJSONObject(queryAPI, new CheckupDataService.GetJSONObjectListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String (responseBody);
-                String receivedPass;
-                try {
-                    JSONObject response = new JSONObject(result);
+            public void onResponse(JSONObject responseJSONObject) {
 //                 /////   Анализ "detail": "User not found" - прервать с ошибкой
 //                  if (response.getString("detail").equals("User not found")) {
-//                      Toast.makeText(getApplicationContext(), "Пользователь не найден", Toast.LENGTH_SHORT).show();
+//                      Toast.makeText(MainActivity.this, "Пользователь не найден", Toast.LENGTH_SHORT).show();
 //                  }
 //                  /////
-                    receivedPass = response.getString("password");
-                    if (response.getString("role_name").equals("user_webapp")) {
-                        Toast.makeText(getApplicationContext(), R.string.alert_wrong_role, Toast.LENGTH_SHORT).show();
-                    } else if (response.getString("role_name").equals("admin")) {
+                try {
+                    String receivedPass = responseJSONObject.getString("password");
+                    if (responseJSONObject.getString("role_name").equals("user_webapp")) {
+                        Toast.makeText(MainActivity.this, R.string.alert_wrong_role, Toast.LENGTH_SHORT).show();
+                    } else if (responseJSONObject.getString("role_name").equals("admin")) {
                         if (comparePasswords(receivedPass, editTextPassword.getText().toString())) {
                             //?? still a question
-                            vars.setIntVars("user_id", Integer.parseInt(response.getString("id")));
-                            vars.setStrVars("user_name", response.getString("name"));
-                            getRoleId(response.getString("role_name"));
+                            vars.setIntVars("user_id", Integer.parseInt(responseJSONObject.getString("id")));
+                            vars.setStrVars("user_name", responseJSONObject.getString("name"));
+                            getRoleId(responseJSONObject.getString("role_name"));
                             // Open admin activity
                             startAdminActivity();
                         } else {
-                            Toast.makeText(getApplicationContext(), R.string.alert_bad_passwd, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.alert_bad_passwd, Toast.LENGTH_SHORT).show();
                         }
-                    } else if (response.getString("role_name").equals("user_mobapp")) {
+                    } else if (responseJSONObject.getString("role_name").equals("user_mobapp")) {
                         if (comparePasswords(receivedPass, editTextPassword.getText().toString())) {
-                            vars.setIntVars("user_id", Integer.parseInt(response.getString("id")));
-                            vars.setStrVars("user_name", response.getString("name"));
-                            getRoleId(response.getString("role_name"));
+                            vars.setIntVars("user_id", Integer.parseInt(responseJSONObject.getString("id")));
+                            vars.setStrVars("user_name", responseJSONObject.getString("name"));
+                            getRoleId(responseJSONObject.getString("role_name"));
                             startRouteActivity();
                         } else {
-                            Toast.makeText(getApplicationContext(), R.string.alert_bad_passwd, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.alert_bad_passwd, Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.alert_error_getting_data) + e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.alert_error_getting_data) + e.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            public void onErrorResponse(String message) {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     public void startAdminActivity() {
