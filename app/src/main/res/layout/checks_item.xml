@@ -68,6 +68,7 @@
                 android:layout_below="@+id/nfcLinkedTitle"
                 android:padding="10dp"
                 android:text="@string/checks_nfc_title_read"
+                android:visibility="gone"
                 android:textSize="18sp" />
 
             <TextView
@@ -78,6 +79,7 @@
                 android:layout_alignParentEnd="true"
                 android:padding="10dp"
                 android:text="NFC_tag"
+                android:visibility="gone"
                 android:textSize="18sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -144,7 +146,7 @@
 
             <EditText
                 android:id="@+id/editTextСomment"
-                android:layout_width="269dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/layoutParams"
                 android:layout_marginTop="0dp"

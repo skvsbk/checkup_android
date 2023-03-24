@@ -3,13 +3,13 @@ package com.example.checkup_android;
 
 
 public class Checks {
-    private String nfc_serial, nfc_read, plant_name, val_name, unit_name;
+    private String nfc_serial, nfc_read, plant_name, val_name, unit_name, note;
     private Integer plant_id;
-    private Float val_min, val_max;
+    private Float val_min, val_max, val_fact;
     private boolean expandable, send;
 
     public Checks(String plant_name, Integer plant_id, String nfc_serial, String nfc_read,
-                  String val_name, Float val_min, Float val_max, String unit_name) {
+                  String val_name, Float val_min, Float val_max, Float val_fact, String unit_name, String note) {
         this.nfc_serial = nfc_serial;
         this.nfc_read = nfc_read;
         this.plant_id = plant_id;
@@ -17,7 +17,10 @@ public class Checks {
         this.val_name = val_name;
         this.val_min = val_min;
         this.val_max = val_max;
+        this.val_fact = val_fact;
         this.unit_name = unit_name;
+        this.note = note;
+
 
         this.expandable = false;
         this.send = false;
@@ -102,75 +105,20 @@ public class Checks {
     public void setSend(boolean send) {
         this.send = send;
     }
-}
 
-//public class Checks {
-//    private String codeNmae, version, apilevel, description;
-//    private boolean expandable, send;
-//
-//    public Checks(String codeNmae, String version, String apilevel, String description) {
-//        this.codeNmae = codeNmae;
-//        this.version = version;
-//        this.apilevel = apilevel;
-//        this.description = description;
-//        this.expandable = false;
-//        this.send = false;
-//    }
-//
-//    public String getCodeNmae() {
-//        return codeNmae;
-//    }
-//
-//    public void setCodeNmae(String codeNmae) {
-//        this.codeNmae = codeNmae;
-//    }
-//
-//    public String getVersion() {
-//        return version;
-//    }
-//
-//    public void setVersion(String version) {
-//        this.version = version;
-//    }
-//
-//    public String getApilevel() {
-//        return apilevel;
-//    }
-//
-//    public void setApilevel(String apilevel) {
-//        this.apilevel = apilevel;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//
-//    public Boolean isExpandable() {
-//        return expandable;
-//    }
-//
-//    public void setExpandable(Boolean expandable) {
-//        this.expandable = expandable;
-//    }
-//
-//    public boolean isSend() {
-//        return send;
-//    }
-//
-//    public void setSend(boolean sended) {
-//        this.send = sended;
-//    }
-//    @Override
-//    public String toString(){
-//        return "Versions{" +
-//                "codeName=" + codeNmae + '\'' +
-//                ", version=" + version + '\'' +
-//                ", apilevel=" + apilevel + '\'' +
-//                ", description=" + description + '\'' +
-//                '}';
-//    }
-//}
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Float getVal_fact() {
+        return val_fact;
+    }
+
+    public void setVal_fact(Float val_fact) {
+        this.val_fact = val_fact;
+    }
+}

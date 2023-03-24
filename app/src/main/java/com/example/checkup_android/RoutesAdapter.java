@@ -64,20 +64,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         public ViewHolder(View itemView){
             super(itemView);
             routeView = itemView.findViewById(R.id.route_name);
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int posItem = getAdapterPosition();
-//                    if (choiceView == null){
-//                        choiceView = routeView;
-//                    }
-//                    choiceView.setBackgroundColor(0);
-//                    routeView.setBackgroundResource(R.color.choice);
-//                    choiceView = routeView;
-//                    vars.setStrVars("route_name", (String) choiceView.getText());
-//                }
-//            });
         }
     }
 }

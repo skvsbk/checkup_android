@@ -131,7 +131,7 @@ public class AdmAddPlantActivity extends AppCompatActivity {
         }
 
         CheckupDataService checkupDataService = new CheckupDataService(AdmAddPlantActivity.this);
-        checkupDataService.postJSONObject(queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
+        checkupDataService.postJSONObject("POST", queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
             @Override
             public void onResponse(JSONObject responseJSONObject) {
                 editTextPlants.setText("");

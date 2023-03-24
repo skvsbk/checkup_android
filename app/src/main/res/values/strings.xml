@@ -9,6 +9,7 @@
     <string name="alert_error_saving_data">Ошибка сохранения данных: </string>
     <string name="alert_ndc_added">NFC добавлена</string>
     <string name="alert_plant_not_found">Помещение/оборудование не найдено</string>
+    <string name="alert_nfc_not_found">Чситайте NFC метку</string>
     <string name="alert_unique_name">Наименование должно быть уникальным</string>
     <string name="alert_item_sucсess_added">Запись успешно добавлена</string>
 

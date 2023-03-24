@@ -73,6 +73,13 @@ public class RouteActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
     private void fillRoutesListView() {
 //        http://127.0.0.1:8000/routes/?facility_id=1
         String queryAPI = urlAPIServer + "/routes/?facility_id=" + facility_id;
@@ -186,10 +193,7 @@ public class RouteActivity extends AppCompatActivity {
                 Toast.makeText(RouteActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-    }
+   }
 
     public void startChecksActivity() {
         Intent intent = new Intent(this, ChecksActivity.class);
@@ -222,7 +226,7 @@ public class RouteActivity extends AppCompatActivity {
         jsonParams.put("time_start", formatForDateNow.format(dateNow));
 
         CheckupDataService checkupDataService = new CheckupDataService(RouteActivity.this);
-        checkupDataService.postJSONObject(queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
+        checkupDataService.postJSONObject("POST", queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
             @Override
             public void onResponse(JSONObject responseJSONObject) {
                 try {
@@ -237,7 +241,7 @@ public class RouteActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(String message) {
-                Toast.makeText(RouteActivity.this, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(RouteActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -245,12 +249,4 @@ public class RouteActivity extends AppCompatActivity {
 
 }
 
-//todo
-// Done  1. API на созранение checkup_header (done) и checkup_detail (done).
-// Done 2. API на получение route_link с val_params с наименованиями.
-// 3. Активити для маршрута: Пройдено/осталось, список точек с параметрами, кнопка Сохранить, кнопка Создать инцидент (опция)
-// Done 4. Создание записи в checkup_headers
-// Done 5. API Update  checkup_headers (time_finish, is_completed)
-// Done 6. Сделать последние 10 обходов с фоном по статусу (зеленый/красный). (API done)
-// Done 7. Выборка по обходам (всего, законченных, незаконченных). (API done)
 

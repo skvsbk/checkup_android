@@ -62,6 +62,12 @@ public class ChecksAdapter extends RecyclerView.Adapter<ChecksAdapter.ViewHolder
         } else {
             holder.paramsLayout.setVisibility(View.VISIBLE);
         }
+        // The button is always inactive until the NFC is read and matches
+        // **** debug=1, prod=0
+        if (vars.getIntvars("debug") == 0) {
+            holder.buttonSendChecks.setEnabled(false);
+        }
+        // ****
 
         // If nfc_read is and equals nfc_linked (from db), then make background green, else - red
         int colorGreen = ContextCompat.getColor(holder.nfcLinkedTxt.getContext(), R.color.green_lihgt);
@@ -69,6 +75,7 @@ public class ChecksAdapter extends RecyclerView.Adapter<ChecksAdapter.ViewHolder
         if (!holder.nfcReadTxt.getText().equals("")) {
             if (holder.nfcReadTxt.getText().equals(holder.nfcLinkedTxt.getText())) {
                 holder.nfcLinkedTxt.setBackgroundColor(colorGreen);
+                holder.buttonSendChecks.setEnabled(true);
             } else {
                 holder.nfcLinkedTxt.setBackgroundColor(colorRed);
             }
@@ -141,7 +148,19 @@ public class ChecksAdapter extends RecyclerView.Adapter<ChecksAdapter.ViewHolder
 
         @Override
         public void onClick(View v) {
-            sendButtonListener.onSendButtonClick(getAdapterPosition());
+            int position = getAbsoluteAdapterPosition();
+            Checks checks = checksList.get(position);
+            if (editTextСommentTxt.getText().toString().equals("")){
+                checks.setNote(null);
+            } else {
+                checks.setNote(editTextСommentTxt.getText().toString());
+            }
+            if (editTextParamTxt.getText().toString().equals("")) {
+                checks.setVal_fact(null);
+            } else {
+                checks.setVal_fact(Float.valueOf(editTextParamTxt.getText().toString()));
+            }
+            sendButtonListener.onSendButtonClick(position);
         }
     }
 }

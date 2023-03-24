@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView19"
+            android:id="@+id/textViewRoute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -46,21 +46,27 @@
             android:id="@+id/divider3"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="2dp"
             android:layout_marginBottom="4dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView21" />
+            app:layout_constraintTop_toBottomOf="parent" />
 
         <TextView
-            android:id="@+id/textView21"
+            android:id="@+id/textViewProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Прогресс"
-            android:textSize="18sp"
-            android:padding="10dp"
+            android:text="Прогресс: 39/40"
+            android:textSize="14sp"
+            android:padding="1dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/textViewProgress" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,5 +1,6 @@
 package com.example.checkup_android;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
@@ -10,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -50,22 +52,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 1 - debug, 0 - prod
+        vars.setIntVars("debug", 0);
 
         // Uncomment it for real device
-//        if (nfcAdapter == null) {
-//            AlertDialog.Builder builderAlert = new AlertDialog.Builder(MainActivity.this);
-//            builderAlert.setTitle("Ошибка")
-//                    .setMessage("Это устройство не поддерживает NFC")
-//                    .setCancelable(false)
-//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            finish();
-//                        }
-//                    });
-//            AlertDialog dialog = builderAlert.create();
-//            dialog.show();
-//        }
+        if (vars.getIntvars("debug") == 0){
+            nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+            if (nfcAdapter == null) {
+                AlertDialog.Builder builderAlert = new AlertDialog.Builder(MainActivity.this);
+                builderAlert.setTitle("Ошибка")
+                        .setMessage("Это устройство не поддерживает NFC")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        });
+                AlertDialog dialog = builderAlert.create();
+                dialog.show();
+            }
+        }
 
         editTextPersonName = findViewById(R.id.editTextPersonName);
         editTextPassword = findViewById(R.id.editTextPassword);
@@ -225,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void getUser(String login_name) {
         // Authentication: get from db by username, compare password hash, return json dict {name, role}

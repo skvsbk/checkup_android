@@ -8,6 +8,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,9 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.SendButtonListener {
@@ -33,7 +37,11 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
 
     VarsSingleton vars;
 
-    TextView textView21, textView19;
+    TextView textViewProgress, textViewRoute;
+    ProgressBar progressBar;
+    Integer routeCounter = 0;
+    Integer routesTotal;
+
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter[] writingTagFilters;
@@ -51,13 +59,15 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
 
         vars = VarsSingleton.getInstance();
         recyclerView = findViewById(R.id.recyclerView_Checks);
+        textViewProgress = findViewById(R.id.textViewProgress);
+        textViewRoute = findViewById(R.id.textViewRoute);
+        progressBar = findViewById(R.id.progressBar);
 
+        textViewRoute.setText(vars.getStrVars("route_name"));
         fillRecyclerView();
         setRecyclerView();
 
         // NFC
-        textView21 = findViewById(R.id.textView21);
-        textView19 = findViewById(R.id.textView19);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         readFromIntent(getIntent());
         pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
@@ -96,7 +106,10 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
                             val_max = Float.valueOf(o.getString("val_max"));
                             unit_name = o.getString("unit_name");
                         }
-                        checksList.add(new Checks(plant_name, plant_id, nfc_serial, null, val_name, val_min, val_max, unit_name));
+                        checksList.add(new Checks(plant_name, plant_id, nfc_serial, null,
+                                val_name, val_min, val_max, null, unit_name, null));
+                        routesTotal = checksList.size();
+                        textViewProgress.setText("Прогресс: " + routeCounter.toString() + "/" + routesTotal.toString());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -149,7 +162,6 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
             byte[] tagId = getIntent().getByteArrayExtra(NfcAdapter.EXTRA_ID);
             String nfc_serial = Utils.byteArrayToHex(tagId);
 //            String nfc_serial = "53E9DC63200001";
-            textView21.setText(nfc_serial);
 
             int currentPosition = vars.getIntvars("current_position");
             Checks currentCheck = checksList.get(currentPosition);
@@ -190,24 +202,116 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
 
     @Override
     public void onSendButtonClick(int position) {
-        // Collapse current
-        Checks checkCurrent = checksList.get(position);
-        checkCurrent.setExpandable(false);
-        checkCurrent.setSend(true);
-        checksAdapter.notifyItemChanged(position);
-
-        int nextPos = position+1;
-        // Expand next
-        if (nextPos < checksList.size()) {
-            checksList.get(nextPos).setExpandable(true);
-            vars.setIntVars("current_position", nextPos);
-//                        vars.setStrVars("current_nfc", nfcLinkedTxt.getText().toString());
-            checksAdapter.notifyItemChanged(nextPos);
-
-        } else {
-        // put time_finish to checkup_headers table and open RoutersAvtivity
-            Toast.makeText(getApplicationContext(), "Обход завершен", Toast.LENGTH_SHORT).show();
+//        http://0.0.0.0:8000/checkup_details/
+        String queryAPI = urlAPIServer + "/checkup_details/";
+        Checks currentItem = checksList.get(position);
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("header_id", vars.getIntvars("header_id"));
+            jsonParams.put("nfc_serial", currentItem.getNfc_serial());
+            jsonParams.put("plant_id", currentItem.getPlant_id());
+            jsonParams.put("plant_name", currentItem.getPlant_name());
+            Date dateNow = new Date();
+            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            jsonParams.put("time_check", formatForDateNow.format(dateNow));
+            jsonParams.put("val_name", currentItem.getVal_name());
+            jsonParams.put("val_min", currentItem.getVal_min());
+            jsonParams.put("val_max", currentItem.getVal_max());
+            jsonParams.put("unit_name", currentItem.getUnit_name());
+            if (currentItem.getVal_name() != null && currentItem.getVal_fact() == null){
+                Toast.makeText(ChecksActivity.this, "Введите значение параметра !", Toast.LENGTH_LONG).show();
+                return;
+            } else {
+                jsonParams.put("val_fact", currentItem.getVal_fact());
+            }
+            jsonParams.put("note", currentItem.getNote());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        CheckupDataService checkupDataService = new CheckupDataService(ChecksActivity.this);
+        checkupDataService.postJSONObject("POST", queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
+            @Override
+            public void onResponse(JSONObject responseJSONObject) {
+                // Collapse current
+                Checks checkCurrent = checksList.get(position);
+                checkCurrent.setExpandable(false);
+                checkCurrent.setSend(true);
+                checksAdapter.notifyItemChanged(position);
+
+                Integer nextPos = position+1;
+                // Expand next
+                if (nextPos < checksList.size()) {
+                    checksList.get(nextPos).setExpandable(true);
+                    vars.setIntVars("current_position", nextPos);
+//                        vars.setStrVars("current_nfc", nfcLinkedTxt.getText().toString());
+                    checksAdapter.notifyItemChanged(nextPos);
+                    int progress = 100 * nextPos / routesTotal;
+                    progressBar.setProgress(progress);
+                    textViewProgress.setText("Прогресс: " + nextPos.toString() + "/" + routesTotal.toString());
+
+                } else {
+                    // Finish. Put checkup_headers time_finish and compleete
+                    // Put time_finish to checkup_headers table and open RoutersAvtivity
+
+                    putCheckupHeader();
+
+                }
+            }
+            @Override
+            public void onErrorResponse(String message) {
+                Toast.makeText(ChecksActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void startRouteActivity(){
+        Intent intent = new Intent(this, RouteActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void putCheckupHeader(){
+//        http://0.0.0.0:8000/checkup_headers/253
+//        {
+//            "time_finish": "2023-03-24T05:28:59.653Z",
+//            "is_complete": true
+//        }
+
+        String queryAPI = urlAPIServer + "/checkup_headers/" + vars.getIntvars("header_id");
+
+        JSONObject jsonParams = new JSONObject();
+        Date dateNow = new Date();
+        SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            jsonParams.put("is_complete", true);
+            jsonParams.put("time_finish", formatForDateNow.format(dateNow));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        CheckupDataService checkupDataService = new CheckupDataService(ChecksActivity.this);
+        checkupDataService.postJSONObject("PUT", queryAPI, jsonParams, new CheckupDataService.PostJSONObjectListener() {
+            @Override
+            public void onResponse(JSONObject responseJSONObject) {
+                try {
+                    if (responseJSONObject.get("detail").equals("success")) {
+                        textViewProgress.setText("Прогресс: " + routesTotal.toString() + "/" + routesTotal.toString());
+                        progressBar.setProgress(100);
+                        Toast.makeText(getApplicationContext(), "Обход завершен", Toast.LENGTH_SHORT).show();
+                        startRouteActivity();
+                    } else {
+                        Toast.makeText(ChecksActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onErrorResponse(String message) {
+                Toast.makeText(ChecksActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }

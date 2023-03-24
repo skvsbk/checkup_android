@@ -72,6 +72,7 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
         String action = intent.getAction();
 
 //        Read NFC and get plant from DB
+//        if (true){
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             byte[] tagId = getIntent().getByteArrayExtra(NfcAdapter.EXTRA_ID);
             String nfc_serial = Utils.byteArrayToHex(tagId);
@@ -90,8 +91,8 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
                             nfc_plant.setText("");
                             nfc_facility.setText("");
                         } else {
-                            nfc_plant.setText(responseJSONObject.getString("name"));
-                            nfc_facility.setText(responseJSONObject.getString("facility"));
+                            nfc_plant.setText(responseJSONObject.getString("plant_name"));
+                            nfc_facility.setText(responseJSONObject.getString("facility_name"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

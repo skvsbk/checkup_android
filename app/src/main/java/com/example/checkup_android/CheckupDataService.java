@@ -65,9 +65,19 @@ public class CheckupDataService {
         void onResponse(JSONObject responseJSONObject);
         void onErrorResponse(String message);
     }
-    public void postJSONObject(String urlAPI, JSONObject params, CheckupDataService.PostJSONObjectListener postJSONObjectListener){
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlAPI, params, new Response.Listener<JSONObject>() {
+    public void postJSONObject(String method, String urlAPI, JSONObject params, CheckupDataService.PostJSONObjectListener postJSONObjectListener){
+
+        int requestMethod;
+        if (method.equals("POST")) {
+            requestMethod = Request.Method.POST;
+        } else if (method.equals("PUT")) {
+            requestMethod = Request.Method.PUT;
+                } else {
+                    return;
+                }
+
+        JsonObjectRequest request = new JsonObjectRequest(requestMethod, urlAPI, params, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
