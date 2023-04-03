@@ -84,6 +84,19 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
     private void fillRecyclerView() {
         checksList = new ArrayList<>();
         // http://0.0.0.0:8000/rolutelinks/2
+//        {
+//            "id": 14,
+//                "order": 10,
+//                "nfc_serial": "53E9DC63200001",
+//                "plant_name": "ЛОС",
+//                "plant_description": "Локальные очистные сооружения",
+//                "plant_description_params": "Общее состояние помещения и систем",
+//                "plant_id": 50,
+//                "val_name": "состояние помещения и систем",
+//                "val_min": 14,
+//                "val_max": 20,
+//                "unit_name": "°C"
+//        }
         String route_id = vars.getIntvars("route_id").toString();
         String queryAPI = urlAPIServer + "/rolutelinks/" + route_id;
         CheckupDataService checkupDataService = new CheckupDataService(ChecksActivity.this);
@@ -94,6 +107,9 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
                     for (int i = 0; i < responseJSONArray.length(); i++) {
                         JSONObject o = responseJSONArray.getJSONObject(i);
                         String plant_name = o.getString("plant_name");
+                        String plant_descr = o.getString("plant_description");
+                        String plant_descr_params = o.getString("plant_description_params");
+
                         Integer plant_id = o.getInt("plant_id");
                         String nfc_serial = o.getString("nfc_serial");
                         String val_name = null;
@@ -106,7 +122,7 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
                             val_max = Float.valueOf(o.getString("val_max"));
                             unit_name = o.getString("unit_name");
                         }
-                        checksList.add(new Checks(plant_name, plant_id, nfc_serial, null,
+                        checksList.add(new Checks(plant_name, plant_descr, plant_descr_params, plant_id, nfc_serial, null,
                                 val_name, val_min, val_max, null, unit_name, null));
                         routesTotal = checksList.size();
                         textViewProgress.setText("Прогресс: " + routeCounter.toString() + "/" + routesTotal.toString());

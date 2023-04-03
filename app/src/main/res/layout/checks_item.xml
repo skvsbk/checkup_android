@@ -62,14 +62,54 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/nfcReadTitle"
+                android:id="@+id/textPlantDescr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/nfcLinkedTitle"
                 android:padding="10dp"
-                android:text="@string/checks_nfc_title_read"
-                android:visibility="gone"
+                android:textSize="18sp"
+                android:text="@string/checks_plant_descr"
+                android:layout_below="@+id/nfcLinkedTitle" />
+
+            <TextView
+                android:id="@+id/plantDescr"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nfcLinkedTitle"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="0dp"
+                android:padding="10dp"
+                android:text="checks_plant_descr"
                 android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textPlantDescrParams"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="18sp"
+                android:text="@string/checks_plant_descr_params"
+                android:layout_below="@+id/plantDescr" />
+
+            <TextView
+                android:id="@+id/plantDescrParams"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/plantDescr"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="0dp"
+                android:padding="10dp"
+                android:text="checks_plant_descr_params"
+                android:textSize="18sp" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/nfcReadTitle"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@+id/nfcLinkedTitle"-->
+<!--                android:padding="10dp"-->
+<!--                android:text="@string/checks_nfc_title_read"-->
+<!--                android:visibility="gone"-->
+<!--                android:textSize="18sp" />-->
 
             <TextView
                 android:id="@+id/nfcRead"
@@ -86,16 +126,31 @@
                 android:id="@+id/layoutParams"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/nfcReadTitle">
+                android:layout_below="@+id/plantDescrParams">
 
                 <TextView
-                    android:id="@+id/textParamName"
+                    android:id="@+id/textParamTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Param name"
+                    android:text="@string/checks_param_title"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/textParamName"
+                    android:layout_width="275dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="8dp"
+                    android:padding="10dp"
+                    android:text="Param name"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/textParamTitle"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -139,7 +194,6 @@
                     android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/textParamMax"
                     app:layout_constraintTop_toBottomOf="@+id/textParamName" />
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

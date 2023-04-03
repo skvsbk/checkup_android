@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // 1 - debug, 0 - prod
-        vars.setIntVars("debug", 0);
+        vars.setIntVars("debug", 1);
 
         // Uncomment it for real device
         if (vars.getIntvars("debug") == 0){

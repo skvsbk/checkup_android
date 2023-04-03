@@ -45,6 +45,8 @@ public class ChecksAdapter extends RecyclerView.Adapter<ChecksAdapter.ViewHolder
 
         Checks checks = checksList.get(position);
         holder.plantTitleTxt.setText(checks.getPlant_name());
+        holder.plantDescrTxt.setText(checks.getPlant_descr());
+        holder.plantDescrParamsTxt.setText(checks.getPlant_descr_params());
         holder.nfcLinkedTxt.setText(checks.getNfc_serial());
         holder.nfcReadTxt.setText(checks.getNfc_read());
         holder.textParamNameTxt.setText(checks.getVal_name());
@@ -106,6 +108,7 @@ public class ChecksAdapter extends RecyclerView.Adapter<ChecksAdapter.ViewHolder
 
         final TextView plantTitleTxt, nfcLinkedTxt, nfcReadTxt, textParamNameTxt, textParamMinTxt;
         final TextView editTextParamTxt, textParamMaxTxt, textUnitNameTxt, editTextСommentTxt;
+        final TextView plantDescrTxt, plantDescrParamsTxt;
         final ImageView imageViewCheckIcon;
         final Button buttonSendChecks;
         ConstraintLayout linearLayout;
@@ -134,6 +137,9 @@ public class ChecksAdapter extends RecyclerView.Adapter<ChecksAdapter.ViewHolder
             linearLayout = itemView.findViewById(R.id.linear_layout);
             expandableLayout = itemView.findViewById(R.id.expandable_layout);
             paramsLayout = itemView.findViewById(R.id.layoutParams);
+
+            plantDescrTxt= itemView.findViewById(R.id.plantDescr);
+            plantDescrParamsTxt= itemView.findViewById(R.id.plantDescrParams);
 
             buttonSendChecks = itemView.findViewById(R.id.buttonSendChecks);
 

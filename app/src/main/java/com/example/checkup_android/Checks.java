@@ -3,17 +3,25 @@ package com.example.checkup_android;
 
 
 public class Checks {
-    private String nfc_serial, nfc_read, plant_name, val_name, unit_name, note;
+    private String nfc_serial;
+    private String nfc_read;
+    private String plant_name;
+    private String plant_descr_params;
+    private String val_name;
+    private String unit_name;
+    private String note;
     private Integer plant_id;
     private Float val_min, val_max, val_fact;
     private boolean expandable, send;
 
-    public Checks(String plant_name, Integer plant_id, String nfc_serial, String nfc_read,
+    public Checks(String plant_name, String plant_descr, String plant_descr_params, Integer plant_id, String nfc_serial, String nfc_read,
                   String val_name, Float val_min, Float val_max, Float val_fact, String unit_name, String note) {
         this.nfc_serial = nfc_serial;
         this.nfc_read = nfc_read;
         this.plant_id = plant_id;
         this.plant_name = plant_name;
+        this.plant_descr = plant_descr;
+        this.plant_descr_params = plant_descr_params;
         this.val_name = val_name;
         this.val_min = val_min;
         this.val_max = val_max;
@@ -40,6 +48,24 @@ public class Checks {
 
     public void setPlant_name(String plant_name) {
         this.plant_name = plant_name;
+    }
+
+    public String getPlant_descr() {
+        return plant_descr;
+    }
+
+    public void setPlant_descr(String plant_descr) {
+        this.plant_descr = plant_descr;
+    }
+
+    private String plant_descr;
+
+    public String getPlant_descr_params() {
+        return plant_descr_params;
+    }
+
+    public void setPlant_descr_params(String plant_descr_params) {
+        this.plant_descr_params = plant_descr_params;
     }
 
     public String getVal_name() {

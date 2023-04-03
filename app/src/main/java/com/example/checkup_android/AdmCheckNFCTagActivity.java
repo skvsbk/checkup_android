@@ -14,8 +14,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.loopj.android.http.AsyncHttpClient;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,7 +22,7 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
     private static final String PREF_URLAPI = "UrlAPI";
     SharedPreferences settings;
     String urlAPIServer;
-    AsyncHttpClient httpClient = new AsyncHttpClient();
+//    AsyncHttpClient httpClient = new AsyncHttpClient();
 
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
@@ -37,6 +35,8 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
     TextView nfc_params;
     TextView nfc_params_name;
     TextView nfc_facility;
+    TextView plant_descr, plant_descr_params;
+    TextView param_name, param_min, param_max, param_ed;
     Button nfc_button;
 
     @Override
@@ -50,9 +50,15 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
         nfc_contents =  (TextView) findViewById(R.id.nfc_contents);
         nfc_facility =  (TextView) findViewById(R.id.nfc_facility);
         nfc_plant =  (TextView) findViewById(R.id.nfc_plant);
-        nfc_params =  (TextView) findViewById(R.id.nfc_params);
-        nfc_params_name =  (TextView) findViewById(R.id.nfc_params_name);
         nfc_button = (Button) findViewById(R.id.nfc_button);
+
+        plant_descr_params = findViewById(R.id.plant_descr_params);
+        plant_descr = findViewById(R.id.plant_descr);
+        param_name = findViewById(R.id.param_name);
+        param_min = findViewById(R.id.param_min);
+        param_max = findViewById(R.id.param_max);
+        param_ed = findViewById(R.id.param_ed);
+
 
         // NFC
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -62,9 +68,7 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writingTagFilters = new IntentFilter[] { tagDetected };
 
-        nfc_button.setOnClickListener(view -> {
-            clearTextView();
-        });
+        nfc_button.setOnClickListener(view -> clearTextView());
     }
 
     private void readFromIntent(Intent intent) {
@@ -90,9 +94,18 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
                         if (responseJSONObject.has("detail")) {
                             nfc_plant.setText("");
                             nfc_facility.setText("");
+                            plant_descr.setText("");
+                            plant_descr_params.setText("");
+                            param_name.setText("");
+                            param_min.setText("");
+                            param_max.setText("");
+                            param_ed.setText("");
                         } else {
                             nfc_plant.setText(responseJSONObject.getString("plant_name"));
                             nfc_facility.setText(responseJSONObject.getString("facility_name"));
+                            plant_descr.setText(responseJSONObject.getString("description_plant"));
+                            plant_descr_params.setText(responseJSONObject.getString("description_params"));
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -111,15 +124,23 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
                 public void onResponse(JSONObject responseJSONObject) {
                     try {
                         if (responseJSONObject.has("detail")) {
-                            nfc_params_name.setText("");
-                            nfc_params.setText("");
+//                            nfc_params_name.setText("");
+//                            nfc_params.setText("");
+                            param_name.setText("");
+                            param_min.setText("");
+                            param_max.setText("");
+                            param_ed.setText("");
                         } else {
-                            nfc_params_name.setText("Наим:\nMin:\nMax:\nЕд.:");
-                            String textParams = responseJSONObject.getString("name") + "\n" +
-                                    responseJSONObject.getString("min_value") + "\n" +
-                                    responseJSONObject.getString("max_value") + "\n" +
-                                    responseJSONObject.getString("unit_name");
-                            nfc_params.setText(textParams);
+//                            nfc_params_name.setText("Наим:\nMin:\nMax:\nЕд.:");
+//                            String textParams = responseJSONObject.getString("name") + "\n" +
+//                                    responseJSONObject.getString("min_value") + "\n" +
+//                                    responseJSONObject.getString("max_value") + "\n" +
+//                                    responseJSONObject.getString("unit_name");
+//                            nfc_params.setText(textParams);
+                            param_name.setText(responseJSONObject.getString("name"));
+                            param_min.setText(responseJSONObject.getString("min_value"));
+                            param_max.setText(responseJSONObject.getString("max_value"));
+                            param_ed.setText(responseJSONObject.getString("unit_name"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -137,9 +158,15 @@ public class AdmCheckNFCTagActivity extends AppCompatActivity {
     private void clearTextView() {
         nfc_contents.setText("");
         nfc_plant.setText("");
-        nfc_params.setText("");
-        nfc_params_name.setText("");
+//        nfc_params.setText("");
+//        nfc_params_name.setText("");
         nfc_facility.setText("");
+        plant_descr.setText("");
+        plant_descr_params.setText("");
+        param_name.setText("");
+        param_min.setText("");
+        param_max.setText("");
+        param_ed.setText("");
     }
 
     @Override

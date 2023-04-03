@@ -32,7 +32,7 @@
     <TextView
         android:id="@+id/textView6"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/check_nfc_tag_plant"
@@ -42,15 +42,63 @@
 
     <TextView
         android:id="@+id/nfc_plant"
-        android:layout_width="190dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_weight="0"
         android:text="Plant"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/nfc_facility" />
+
+    <TextView
+        android:id="@+id/text_plant_descr"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/check_nfc_tag_plant_descr"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nfc_plant" />
+
+    <TextView
+        android:id="@+id/plant_descr"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="plant_descr"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/text_plant_descr"
+        app:layout_constraintTop_toTopOf="@+id/text_plant_descr" />
+
+    <TextView
+        android:id="@+id/text_plant_descr_params"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/check_nfc_tag_plant_descr_params"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plant_descr" />
+
+    <TextView
+        android:id="@+id/plant_descr_params"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="plant_descr_params"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/text_plant_descr_params"
+        app:layout_constraintTop_toTopOf="@+id/text_plant_descr_params" />
 
     <TextView
         android:id="@+id/textView9"
@@ -82,49 +130,123 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:textSize="18sp"
         android:text="@string/check_nfc_params"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/text_plant_descr_params" />
+
     <TextView
-        android:id="@+id/nfc_params_name"
-        android:layout_width="60dp"
-        android:layout_height="63dp"
+        android:id="@+id/text_params_name"
+        android:layout_width="89dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Params"
+        android:text="@string/check_nfc_param_name"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
-        android:id="@+id/nfc_params"
-        android:layout_width="302dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="8dp"
+        android:id="@+id/text_params_min"
+        android:layout_width="89dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Params"
+        android:text="@string/check_nfc_param_min"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/nfc_params_name"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/param_name" />
+    <TextView
+        android:id="@+id/text_params_max"
+        android:layout_width="89dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/check_nfc_param_max"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_params_min" />
+    <TextView
+        android:id="@+id/text_params_ed"
+        android:layout_width="89dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/check_nfc_param_ed"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_params_max" />
+
+    <TextView
+        android:id="@+id/param_name"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="16dp"
+        android:text="Param_name"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_params_name" />
+
+    <TextView
+        android:id="@+id/param_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="16dp"
+        android:text="Param_min"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_params_min" />
+
+
+    <TextView
+        android:id="@+id/param_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="16dp"
+        android:text="Param_max"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_params_max" />
+
+    <TextView
+        android:id="@+id/param_ed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="16dp"
+        android:text="Param_ed"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_params_ed" />
 
     <Button
         android:id="@+id/nfc_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="36dp"
         android:text="@string/check_nfc_button_clear"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/text_params_ed" />
 
     <TextView
-        android:layout_width="250dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="120dp"
+        android:layout_width="304dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="16dp"
         android:text="@string/check_nfc_hint"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nfc_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,10 +38,16 @@
 
     <string name="check_nfc_tag_serial">NFC serial:</string>
     <string name="check_nfc_tag_facility">Площадка:</string>
-    <string name="check_nfc_tag_plant">Помещение/оборудование:</string>
+    <string name="check_nfc_tag_plant">№ помещения:</string>
+    <string name="check_nfc_tag_plant_descr">Наименование помещения:</string>
+    <string name="check_nfc_tag_plant_descr_params">Контролируемые параметры:</string>
     <string name="check_nfc_params">Параметры:</string>
     <string name="check_nfc_button_clear">Очистить</string>
     <string name="check_nfc_hint">Коснитесь метки для контроля правильности места установки и корректности параметров</string>
+    <string name="check_nfc_param_name">Наим.</string>
+    <string name="check_nfc_param_min">Min.</string>
+    <string name="check_nfc_param_max">Max.</string>
+    <string name="check_nfc_param_ed">Ед.изм.</string>
 
     <string name="add_plant">Помещение/оборудование</string>
     <string name="add_plant_button_add">Добавить</string>
@@ -70,6 +76,9 @@
     <string name="checks_nfc_title_read">NFC serial (факт):</string>
     <string name="checks_comnent_hint">Коментарий:</string>
     <string name="checks_button_send">OK</string>
+    <string name="checks_plant_descr">Наим.помещения:</string>
+    <string name="checks_plant_descr_params">Контр.параметры:</string>
+    <string name="checks_param_title">Параметр:</string>
 
 
 </resources>
