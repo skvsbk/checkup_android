@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // 1 - debug, 0 - prod
-        vars.setIntVars("debug", 1);
+        vars.setIntVars("debug", 0);
 
         // Uncomment it for real device
         if (vars.getIntvars("debug") == 0){
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(String message) {
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         String md5Hex = bigInt.toString(16);
 
         while( md5Hex.length() < 32 ){
-            md5Hex = "0" + md5Hex;
+            md5Hex = "0".concat(md5Hex);
         }
 
         return md5Hex;
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onErrorResponse(String message) {
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onErrorResponse(String message) {
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -273,12 +273,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(MainActivity.this, getString(R.string.alert_error_getting_data) + e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.alert_error_getting_data) + e, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onErrorResponse(String message) {
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.alert_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }

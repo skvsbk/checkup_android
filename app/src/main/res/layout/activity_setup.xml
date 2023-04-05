@@ -25,6 +25,7 @@
             android:layout_marginTop="20dp"
             android:text="@string/setup_text_server"
             android:textSize="18sp"
+            android:textColor="@color/black"
             android:fontFamily="sans-serif"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,6 +38,7 @@
             android:ems="10"
             android:hint="@string/setup_text_hint"
             android:inputType="textPersonName"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />

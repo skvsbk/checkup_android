@@ -22,10 +22,11 @@
             android:layout_marginStart="16dp"
             android:padding="10dp"
             android:text="Plant"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/imageViewCheckIcon"
-            tools:layout_editor_absoluteY="0dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageViewCheckIcon"
@@ -50,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="@string/checks_nfc_title"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/nfcLinked"
@@ -59,7 +61,8 @@
                 android:layout_alignParentEnd="true"
                 android:padding="10dp"
                 android:text="NFC_tag"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/textPlantDescr"
@@ -67,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:textSize="18sp"
+                android:textColor="@color/black"
                 android:text="@string/checks_plant_descr"
                 android:layout_below="@+id/nfcLinkedTitle" />
 
@@ -78,6 +82,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="0dp"
                 android:padding="10dp"
+                android:textColor="@color/black"
                 android:text="checks_plant_descr"
                 android:textSize="18sp" />
 
@@ -87,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:textSize="18sp"
+                android:textColor="@color/black"
                 android:text="@string/checks_plant_descr_params"
                 android:layout_below="@+id/plantDescr" />
 
@@ -98,6 +104,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="0dp"
                 android:padding="10dp"
+                android:textColor="@color/black"
                 android:text="checks_plant_descr_params"
                 android:textSize="18sp" />
 
@@ -135,6 +142,7 @@
                     android:padding="10dp"
                     android:text="@string/checks_param_title"
                     android:textSize="18sp"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -148,6 +156,7 @@
                     android:padding="10dp"
                     android:text="Param name"
                     android:textSize="18sp"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/textParamTitle"
@@ -160,15 +169,18 @@
                     android:layout_below="@+id/textParamName"
                     android:padding="10dp"
                     android:text="ParamMin"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
-                    app:layout_constraintTop_toBottomOf="@+id/textParamName"
-                    tools:layout_editor_absoluteX="0dp" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textParamName" />
 
                 <EditText
                     android:id="@+id/editTextParam"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:inputType="numberDecimal"
                     app:layout_constraintStart_toEndOf="@+id/textParamMin"
                     app:layout_constraintTop_toBottomOf="@+id/textParamName" />
@@ -181,6 +193,7 @@
                     android:padding="10dp"
                     android:text="ParamMax"
                     android:textSize="18sp"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toEndOf="@+id/editTextParam"
                     app:layout_constraintTop_toBottomOf="@+id/textParamName" />
 
@@ -192,6 +205,7 @@
                     android:padding="10dp"
                     android:text="UnitName"
                     android:textSize="18sp"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toEndOf="@+id/textParamMax"
                     app:layout_constraintTop_toBottomOf="@+id/textParamName" />
 
@@ -207,6 +221,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/checks_comnent_hint"
+                android:textColor="@color/black"
                 android:inputType="textMultiLine" />
 
             <Button

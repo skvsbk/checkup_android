@@ -28,6 +28,7 @@
             android:text="@string/checks_route_name"
             android:textSize="18sp"
             android:padding="10dp"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,6 +40,7 @@
             android:text="TextView"
             android:textSize="18sp"
             android:padding="10dp"
+            android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/textView13"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,9 +57,10 @@
             android:id="@+id/textViewProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Прогресс: 39/40"
+            android:text="Прогресс: 0/0"
             android:textSize="14sp"
             android:padding="1dp"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13" />
 

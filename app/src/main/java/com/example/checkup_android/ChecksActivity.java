@@ -70,7 +70,7 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
         // NFC
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         readFromIntent(getIntent());
-        pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writingTagFilters = new IntentFilter[] { tagDetected };
@@ -125,7 +125,8 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
                         checksList.add(new Checks(plant_name, plant_descr, plant_descr_params, plant_id, nfc_serial, null,
                                 val_name, val_min, val_max, null, unit_name, null));
                         routesTotal = checksList.size();
-                        textViewProgress.setText("Прогресс: " + routeCounter.toString() + "/" + routesTotal.toString());
+                        String textProgress = "Прогресс: " + routeCounter.toString() + "/" + routesTotal.toString();
+                        textViewProgress.setText(textProgress);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -219,6 +220,21 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
     @Override
     public void onSendButtonClick(int position) {
 //        http://0.0.0.0:8000/checkup_details/
+//        {
+//            "header_id": 287,
+//                "nfc_serial": "string",
+//                "plant_id": 0,
+//                "plant_name": "string",
+//                "plant_description": "string",
+//                "plant_description_params": "string",
+//                "time_check": "2023-04-05T13:02:24.983Z",
+//                "val_name": "string",
+//                "val_min": 0,
+//                "val_max": 0,
+//                "unit_name": "string",
+//                "val_fact": 0,
+//                "note": "string"
+//        }
         String queryAPI = urlAPIServer + "/checkup_details/";
         Checks currentItem = checksList.get(position);
         JSONObject jsonParams = new JSONObject();
@@ -227,6 +243,8 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
             jsonParams.put("nfc_serial", currentItem.getNfc_serial());
             jsonParams.put("plant_id", currentItem.getPlant_id());
             jsonParams.put("plant_name", currentItem.getPlant_name());
+            jsonParams.put("plant_description", currentItem.getPlant_descr());
+            jsonParams.put("plant_description_params", currentItem.getPlant_descr_params());
             Date dateNow = new Date();
             SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             jsonParams.put("time_check", formatForDateNow.format(dateNow));
@@ -264,14 +282,14 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
                     checksAdapter.notifyItemChanged(nextPos);
                     int progress = 100 * nextPos / routesTotal;
                     progressBar.setProgress(progress);
-                    textViewProgress.setText("Прогресс: " + nextPos.toString() + "/" + routesTotal.toString());
+                    String textProgress = "Прогресс: " + nextPos.toString() + "/" + routesTotal.toString();
+                    textViewProgress.setText(textProgress);
 
                 } else {
                     // Finish. Put checkup_headers time_finish and compleete
                     // Put time_finish to checkup_headers table and open RoutersAvtivity
 
                     putCheckupHeader();
-
                 }
             }
             @Override
@@ -312,7 +330,8 @@ public class ChecksActivity extends AppCompatActivity implements ChecksAdapter.S
             public void onResponse(JSONObject responseJSONObject) {
                 try {
                     if (responseJSONObject.get("detail").equals("success")) {
-                        textViewProgress.setText("Прогресс: " + routesTotal.toString() + "/" + routesTotal.toString());
+                        String textProgress = "Прогресс: " + routesTotal.toString() + "/" + routesTotal.toString();
+                        textViewProgress.setText(textProgress);
                         progressBar.setProgress(100);
                         Toast.makeText(getApplicationContext(), "Обход завершен", Toast.LENGTH_SHORT).show();
                         startRouteActivity();
