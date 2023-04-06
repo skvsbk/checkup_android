@@ -73,8 +73,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="603dp"
+        android:layout_width="400dp"
+        android:layout_height="560dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="4dp"
@@ -90,8 +90,7 @@
             android:id="@+id/recyclerView_Checks"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
